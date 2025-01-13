@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.okhttp)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
