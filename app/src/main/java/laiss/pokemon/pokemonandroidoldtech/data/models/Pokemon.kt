@@ -1,5 +1,7 @@
 package laiss.pokemon.pokemonandroidoldtech.data.models
 
+import laiss.pokemon.pokemonandroidoldtech.data.dataSources.PokemonDto
+
 enum class PokemonType(val typeString: String) {
     Normal("normal"),
     Fire("fire"),
@@ -37,4 +39,16 @@ class Pokemon(
     val attack: Int,
     val defense: Int,
     val hp: Int
+)
+
+fun PokemonDto.toModel() = Pokemon(
+    id = id,
+    name = name,
+    imageUrl = sprites.frontDefault,
+    heightDm = height,
+    weightHg = weight,
+    types = types.map { PokemonType[it.type.name] ?: PokemonType.Unknown },
+    attack = stats.first { it.stat.name == "attack" }.baseStat,
+    defense = stats.first { it.stat.name == "defense" }.baseStat,
+    hp = stats.first { it.stat.name == "hp" }.baseStat
 )
