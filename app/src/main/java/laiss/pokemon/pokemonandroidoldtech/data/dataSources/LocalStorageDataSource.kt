@@ -28,19 +28,19 @@ class LocalStorageDataSource(applicationContext: Context) {
     private val localDatabase =
         Room.databaseBuilder(applicationContext, LocalDatabase::class.java, "local-db").build()
 
-    suspend fun getPokemonList() = localDatabase.pokemonDao().loadAllPokemon()
+    fun getPokemonList() = localDatabase.pokemonDao().loadAllPokemon()
 
-    suspend fun storePokemon(pokemon: PokemonEntity) =
+    fun storePokemon(pokemon: PokemonEntity) =
         localDatabase.pokemonDao().insertPokemon(pokemon)
 }
 
 @Dao
 internal interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPokemon(pokemon: PokemonEntity)
+    fun insertPokemon(pokemon: PokemonEntity)
 
     @Query("SELECT * from pokemon")
-    suspend fun loadAllPokemon(): List<PokemonEntity>
+    fun loadAllPokemon(): List<PokemonEntity>
 }
 
 @Database(entities = [PokemonEntity::class], version = 1)
