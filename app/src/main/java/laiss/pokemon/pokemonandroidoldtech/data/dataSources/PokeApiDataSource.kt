@@ -14,9 +14,9 @@ class PokeApiDataSource(private val client: OkHttpClient) {
 
     fun getPokemon(name: String) = preformGetRequest<PokemonDto>("$baseUrl/pokemon/$name/")
 
-    private inline fun <reified T> preformGetRequest(url: String) {
+    private inline fun <reified T> preformGetRequest(url: String): T {
         val request = Request.Builder().url(url).build()
-        client.newCall(request).execute().use { response ->
+        return client.newCall(request).execute().use { response ->
             if (response.isSuccessful.not()) throw IOException("Request failed: $response")
             response.body?.string()
         }?.let {
