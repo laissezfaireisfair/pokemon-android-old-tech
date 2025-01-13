@@ -1,4 +1,4 @@
-package laiss.pokemon.pokemonandroidoldtech
+package laiss.pokemon.pokemonandroidoldtech.ui.views
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import laiss.pokemon.pokemonandroidoldtech.R
 import laiss.pokemon.pokemonandroidoldtech.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
