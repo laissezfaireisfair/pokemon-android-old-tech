@@ -26,21 +26,7 @@ class PokemonRepository(
     internal val pageSize: Int
 ) : IPokemonRepository {
     private lateinit var strategy: IStrategy
-    private var isInitialized = false  // TODO: Add mutex to prevent parallel initializations
-
-    private fun ensureIsInitialized() {
-        if (isInitialized) return
-
-        val pokemonEntities = localStorageDataSource.getPokemonList()
-        try {
-            val pokemonCount = pokeApiDataSource.getPokemonHeadersList(0, 1).count
-            strategy = OnlineStrategy(pokemonCount, pokemonEntities, this)
-        } catch (_: Exception) {
-            strategy = OfflineStrategy(pokemonEntities, this)
-        }
-
-        isInitialized = true
-    }
+    private var isInitialized = false
 
     override fun getPage(number: Int, pagingOffset: Int, callback: (List<Pokemon>) -> Unit) {
         threadPoolExecutor.execute {
@@ -61,6 +47,21 @@ class PokemonRepository(
             val pokemon = getPokemonByNameInternal(pokemonName)
             resultHandler.post { callback(pokemon) }
         }
+    }
+
+    @Synchronized
+    private fun ensureIsInitialized() {
+        if (isInitialized) return
+
+        val pokemonEntities = localStorageDataSource.getPokemonList()
+        try {
+            val pokemonCount = pokeApiDataSource.getPokemonHeadersList(0, 1).count
+            strategy = OnlineStrategy(pokemonCount, pokemonEntities, this)
+        } catch (_: Exception) {
+            strategy = OfflineStrategy(pokemonEntities, this)
+        }
+
+        isInitialized = true
     }
 
     private fun getPageInternal(number: Int, pagingOffset: Int): List<Pokemon> {
@@ -95,7 +96,7 @@ private class OnlineStrategy(
     /**
      * Copies remote structure, nulls for non-loaded items*/
     private val pokemonListCache =
-        MutableList<Pokemon?>(pokemonCount) { null }  // TODO: Add mutex to caches
+        MutableList<Pokemon?>(pokemonCount) { null }
     private val pokemonByNameCache =
         pokemonEntities.map { it.toModel() }.associateBy { it.name }.toMutableMap()
 
@@ -113,7 +114,9 @@ private class OnlineStrategy(
             repository.pokeApiDataSource.getPokemonHeadersList(offset, repository.pageSize)
 
         val pokemonList = headerList.results.map { getPokemonByName(it.name) }
-        pokemonList.forEachIndexed { i, pokemon -> pokemonListCache[offset + i] = pokemon }
+        synchronized(pokemonListCache) {
+            pokemonList.forEachIndexed { i, pokemon -> pokemonListCache[offset + i] = pokemon }
+        }
         return pokemonList
     }
 
@@ -122,7 +125,9 @@ private class OnlineStrategy(
         if (cachedPokemon != null) return cachedPokemon
 
         val pokemon = repository.pokeApiDataSource.getPokemon(pokemonName).toModel()
-        pokemonByNameCache[pokemon.name] = pokemon
+        synchronized(pokemonByNameCache) {
+            pokemonByNameCache[pokemon.name] = pokemon
+        }
         repository.localStorageDataSource.storePokemon(pokemon.toEntity())
         return pokemon
     }

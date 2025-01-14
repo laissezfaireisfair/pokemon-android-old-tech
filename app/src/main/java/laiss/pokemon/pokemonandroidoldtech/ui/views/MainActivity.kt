@@ -16,7 +16,7 @@ import laiss.pokemon.pokemonandroidoldtech.databinding.ActivityMainBinding
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class MainActivity : AppCompatActivity(), KoinComponent {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
