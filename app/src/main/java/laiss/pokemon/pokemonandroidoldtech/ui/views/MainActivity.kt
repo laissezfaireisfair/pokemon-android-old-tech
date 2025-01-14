@@ -9,10 +9,14 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import laiss.pokemon.pokemonandroidoldtech.R
+import laiss.pokemon.pokemonandroidoldtech.data.IPokemonRepository
 import laiss.pokemon.pokemonandroidoldtech.databinding.ActivityMainBinding
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KoinComponent {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding

@@ -1,31 +1,32 @@
 package laiss.pokemon.pokemonandroidoldtech.data
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import android.os.Handler
 import laiss.pokemon.pokemonandroidoldtech.data.dataSources.LocalStorageDataSource
 import laiss.pokemon.pokemonandroidoldtech.data.dataSources.PokeApiDataSource
 import laiss.pokemon.pokemonandroidoldtech.data.dataSources.PokemonEntity
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.data.models.toEntity
 import laiss.pokemon.pokemonandroidoldtech.data.models.toModel
+import java.util.concurrent.ThreadPoolExecutor
 import kotlin.random.Random
 
 interface IPokemonRepository {
-    fun getPage(number: Int, pagingOffset: Int = 0): List<Pokemon>
+    fun getPage(number: Int, pagingOffset: Int = 0, callback: (List<Pokemon>) -> Unit)
 
-    fun getRandomPageNumberAndOffset(): Pair<Int, Int>
+    fun getRandomPageNumberAndOffset(callback: (Pair<Int, Int>) -> Unit)
 
-    fun getPokemonByName(pokemonName: String): Pokemon
+    fun getPokemonByName(pokemonName: String, callback: (Pokemon) -> Unit)
 }
 
-
 class PokemonRepository(
+    private val threadPoolExecutor: ThreadPoolExecutor,
+    private val resultHandler: Handler,
     internal val pokeApiDataSource: PokeApiDataSource,
     internal val localStorageDataSource: LocalStorageDataSource,
     internal val pageSize: Int
 ) : IPokemonRepository {
     private lateinit var strategy: IStrategy
-    private var isInitialized = false
+    private var isInitialized = false  // TODO: Add mutex to prevent parallel initializations
 
     private fun ensureIsInitialized() {
         if (isInitialized) return
@@ -41,19 +42,40 @@ class PokemonRepository(
         isInitialized = true
     }
 
-    override fun getPage(number: Int, pagingOffset: Int): List<Pokemon> {
+    override fun getPage(number: Int, pagingOffset: Int, callback: (List<Pokemon>) -> Unit) {
+        threadPoolExecutor.execute {
+            val page = getPageInternal(number, pagingOffset)
+            resultHandler.post { callback(page) }
+        }
+    }
+
+    override fun getRandomPageNumberAndOffset(callback: (Pair<Int, Int>) -> Unit) {
+        threadPoolExecutor.execute {
+            val (number, offset) = getRandomPageNumberAndOffsetInternal()
+            resultHandler.post { callback(number to offset) }
+        }
+    }
+
+    override fun getPokemonByName(pokemonName: String, callback: (Pokemon) -> Unit) {
+        threadPoolExecutor.execute {
+            val pokemon = getPokemonByNameInternal(pokemonName)
+            resultHandler.post { callback(pokemon) }
+        }
+    }
+
+    private fun getPageInternal(number: Int, pagingOffset: Int): List<Pokemon> {
         ensureIsInitialized()
         return strategy.getPage(number, pagingOffset)
     }
 
-    override fun getRandomPageNumberAndOffset(): Pair<Int, Int> {
+    private fun getRandomPageNumberAndOffsetInternal(): Pair<Int, Int> {
         ensureIsInitialized()
         val pageNumber = Random.nextInt(0, strategy.pokemonCount / pageSize)
         val pagingOffset = Random.nextInt(0, pageSize)
         return pageNumber to pagingOffset
     }
 
-    override fun getPokemonByName(pokemonName: String): Pokemon {
+    private fun getPokemonByNameInternal(pokemonName: String): Pokemon {
         ensureIsInitialized()
         return strategy.getPokemonByName(pokemonName)
     }
@@ -72,7 +94,8 @@ private class OnlineStrategy(
 ) : IStrategy {
     /**
      * Copies remote structure, nulls for non-loaded items*/
-    private val pokemonListCache = MutableList<Pokemon?>(pokemonCount) { null }
+    private val pokemonListCache =
+        MutableList<Pokemon?>(pokemonCount) { null }  // TODO: Add mutex to caches
     private val pokemonByNameCache =
         pokemonEntities.map { it.toModel() }.associateBy { it.name }.toMutableMap()
 
