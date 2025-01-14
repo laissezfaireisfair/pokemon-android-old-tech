@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.okhttp)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
