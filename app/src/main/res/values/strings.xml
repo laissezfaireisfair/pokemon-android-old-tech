@@ -2,5 +2,6 @@
     <string name="app_name">Pokemon Android Old Tech</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="overview_fragment_label">Overview Fragment</string>
+    <string name="overview_fragment_label">Overview</string>
+    <string name="overview_card_pic_label">Pokemon front image</string>
 </resources>
