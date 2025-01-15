@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import laiss.pokemon.pokemonandroidoldtech.databinding.OverviewFragmentBinding
-import laiss.pokemon.pokemonandroidoldtech.ui.adapters.OverviewAdapter
-import laiss.pokemon.pokemonandroidoldtech.ui.viewModels.OverviewScreenViewModel
+import laiss.pokemon.pokemonandroidoldtech.ui.adapters.PokemonAdapter
+import laiss.pokemon.pokemonandroidoldtech.ui.viewModels.OverviewViewModel
 
 class OverviewFragment : Fragment() {
     private lateinit var binding: OverviewFragmentBinding
-    private val viewModel: OverviewScreenViewModel by viewModels()
+    private val viewModel: OverviewViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,8 +24,8 @@ class OverviewFragment : Fragment() {
 
         binding.pokemonRv.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.entries.observe(viewLifecycleOwner) {
-            binding.pokemonRv.adapter = OverviewAdapter(requireContext(), it, viewModel)
+        viewModel.pokemonList.observe(viewLifecycleOwner) {
+            binding.pokemonRv.adapter = PokemonAdapter(requireContext(), it, viewModel)
         }
 
         return binding.root
