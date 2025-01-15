@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.databinding.OverviewFragmentBinding
 import laiss.pokemon.pokemonandroidoldtech.ui.adapters.PokemonAdapter
@@ -24,16 +25,47 @@ class OverviewFragment : Fragment() {
     ): View {
         binding = OverviewFragmentBinding.inflate(inflater, container, false)
 
-        binding.pokemonRv.layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.pokemonRv.layoutManager = layoutManager
 
         viewModel.pokemonList.observe(viewLifecycleOwner) {
             binding.pokemonRv.adapter = PokemonAdapter(requireContext(), it, ::onPokemonClicked)
         }
 
+        binding.pokemonRv.addOnScrollListener(EndReachListener(layoutManager) {
+            Toast.makeText(activity, "End reached", Toast.LENGTH_SHORT).show()
+        })
+
         return binding.root
     }
 
-    private fun onPokemonClicked(pokemon: Pokemon){
+    private fun onPokemonClicked(pokemon: Pokemon) {
         Toast.makeText(activity, "Pokemon ${pokemon.name} clicked", Toast.LENGTH_SHORT).show()
+    }
+}
+
+private class EndReachListener(
+    private val layoutManager: LinearLayoutManager,
+    private val callback: () -> Unit
+) : RecyclerView.OnScrollListener() {
+    companion object {
+        var isAlreadyReported = false
+    }
+
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+
+        val buffer = 5
+        val visibleItemsCount = recyclerView.childCount
+        val totalItemsCount = layoutManager.itemCount
+        val lastVisibleItem = layoutManager.findFirstVisibleItemPosition() + visibleItemsCount - 1
+        val isEndReached = lastVisibleItem + buffer > totalItemsCount
+
+        if (isEndReached) {
+            isAlreadyReported = true
+            callback()
+        } else {
+            isAlreadyReported = false
+        }
     }
 }
