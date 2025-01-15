@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor
 import kotlin.random.Random
 
 interface IPokemonRepository {
-    fun getPage(number: Int, pagingOffset: Int = 0, callback: (List<Pokemon>) -> Unit)
+    fun getPage(number: Int, pagingOffset: Int = 0, callback: (List<Pokemon>) -> Unit)  // TODO: Callback should be able to receive error
 
     fun getRandomPageNumberAndOffset(callback: (Pair<Int, Int>) -> Unit)
 

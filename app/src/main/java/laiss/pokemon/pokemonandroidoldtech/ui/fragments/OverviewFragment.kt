@@ -32,9 +32,12 @@ class OverviewFragment : Fragment() {
             binding.pokemonRv.adapter = PokemonAdapter(requireContext(), it, ::onPokemonClicked)
         }
 
-        binding.pokemonRv.addOnScrollListener(EndReachListener(layoutManager) {
-            Toast.makeText(activity, "End reached", Toast.LENGTH_SHORT).show()
-        })
+        binding.pokemonRv.addOnScrollListener(
+            EndReachListener(
+                layoutManager,
+                viewModel::startLoadingNextPage
+            )
+        )
 
         return binding.root
     }
