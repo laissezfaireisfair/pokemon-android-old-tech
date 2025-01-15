@@ -11,11 +11,11 @@ import java.util.concurrent.ThreadPoolExecutor
 import kotlin.random.Random
 
 interface IPokemonRepository {
-    fun getPage(number: Int, pagingOffset: Int = 0, callback: (List<Pokemon>) -> Unit)  // TODO: Callback should be able to receive error
+    fun getPage(number: Int, pagingOffset: Int = 0, callback: (Result<List<Pokemon>>) -> Unit)
 
-    fun getRandomPageNumberAndOffset(callback: (Pair<Int, Int>) -> Unit)
+    fun getRandomPageNumberAndOffset(callback: (Result<Pair<Int, Int>>) -> Unit)
 
-    fun getPokemonByName(pokemonName: String, callback: (Pokemon) -> Unit)
+    fun getPokemonByName(pokemonName: String, callback: (Result<Pokemon>) -> Unit)
 }
 
 class PokemonRepository(
@@ -28,24 +28,40 @@ class PokemonRepository(
     private lateinit var strategy: IStrategy
     private var isInitialized = false
 
-    override fun getPage(number: Int, pagingOffset: Int, callback: (List<Pokemon>) -> Unit) {
+    override fun getPage(
+        number: Int,
+        pagingOffset: Int,
+        callback: (Result<List<Pokemon>>) -> Unit
+    ) {
         threadPoolExecutor.execute {
-            val page = getPageInternal(number, pagingOffset)
-            resultHandler.post { callback(page) }
+            try {
+                val page = getPageInternal(number, pagingOffset)
+                resultHandler.post { callback(Result.success(page)) }
+            } catch (exception: Exception) {
+                resultHandler.post { callback(Result.failure(exception)) }
+            }
         }
     }
 
-    override fun getRandomPageNumberAndOffset(callback: (Pair<Int, Int>) -> Unit) {
+    override fun getRandomPageNumberAndOffset(callback: (Result<Pair<Int, Int>>) -> Unit) {
         threadPoolExecutor.execute {
-            val (number, offset) = getRandomPageNumberAndOffsetInternal()
-            resultHandler.post { callback(number to offset) }
+            try {
+                val (number, offset) = getRandomPageNumberAndOffsetInternal()
+                resultHandler.post { callback(Result.success(number to offset)) }
+            } catch (exception: Exception) {
+                resultHandler.post { callback(Result.failure(exception)) }
+            }
         }
     }
 
-    override fun getPokemonByName(pokemonName: String, callback: (Pokemon) -> Unit) {
+    override fun getPokemonByName(pokemonName: String, callback: (Result<Pokemon>) -> Unit) {
         threadPoolExecutor.execute {
-            val pokemon = getPokemonByNameInternal(pokemonName)
-            resultHandler.post { callback(pokemon) }
+            try {
+                val pokemon = getPokemonByNameInternal(pokemonName)
+                resultHandler.post { callback(Result.success(pokemon)) }
+            } catch (exception: Exception) {
+                resultHandler.post { callback(Result.failure(exception)) }
+            }
         }
     }
 

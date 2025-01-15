@@ -15,7 +15,7 @@ class OverviewViewModel : ViewModel(), KoinComponent {
     private var page = 0
     private var pagingOffset = 0
 
-    private val _pokemonList = MutableLiveData<List<Pokemon>>()
+    private val _pokemonList = MutableLiveData(emptyList<Pokemon>())
     val pokemonList: LiveData<List<Pokemon>> = _pokemonList
 
     private val _isLoading = MutableLiveData<Boolean>(false)
@@ -25,22 +25,28 @@ class OverviewViewModel : ViewModel(), KoinComponent {
     val error: LiveData<String?> = _error
 
     init {
-        pokemonRepository.getPage(0, 0, ::refreshPokemonList)
+        _isLoading.value = true
+        pokemonRepository.getPage(0, 0, ::onPageLoaded)
     }
 
     fun startLoadingNextPage() {
         if (isEndReached || isLoading.value!!) return
         _isLoading.value = true
-        pokemonRepository.getPage(page + 1, pagingOffset, ::appendPage)
+        pokemonRepository.getPage(page + 1, pagingOffset, ::onPageLoaded)
     }
 
-    private fun refreshPokemonList(newPokemonList: List<Pokemon>) {
-        _pokemonList.value = newPokemonList
-    }
-
-    private fun appendPage(newPage: List<Pokemon>) {
-        _isLoading.value = false
-        _pokemonList.value = pokemonList.value!! + newPage
-        ++page
+    private fun onPageLoaded(newPageResult: Result<List<Pokemon>>) {
+        try {
+            val newPage = newPageResult.getOrThrow()
+            if (newPage.isEmpty())
+                isEndReached = true
+            _pokemonList.value = pokemonList.value!! + newPage
+        }
+        catch (exception: Exception) {
+            _error.value = exception.message
+        }
+        finally {
+            _isLoading.value = false
+        }
     }
 }

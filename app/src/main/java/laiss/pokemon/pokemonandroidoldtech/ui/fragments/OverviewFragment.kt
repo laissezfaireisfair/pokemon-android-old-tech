@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,13 @@ class OverviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = OverviewFragmentBinding.inflate(inflater, container, false)
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            binding.errorHeader.isVisible = viewModel.error.value != null
+            binding.errorMessage.isVisible = viewModel.error.value != null
+            binding.pokemonRv.isVisible = viewModel.error.value == null
+            binding.errorMessage.text = viewModel.error.value
+        }
 
         val layoutManager = LinearLayoutManager(requireContext())
         binding.pokemonRv.layoutManager = layoutManager
@@ -65,8 +73,10 @@ private class EndReachListener(
         val isEndReached = lastVisibleItem + buffer > totalItemsCount
 
         if (isEndReached) {
-            isAlreadyReported = true
-            callback()
+            if (!isAlreadyReported) {
+                isAlreadyReported = true
+                callback()
+            }
         } else {
             isAlreadyReported = false
         }

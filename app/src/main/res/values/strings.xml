@@ -4,4 +4,5 @@
     <!-- Strings used for fragments for navigation -->
     <string name="overview_fragment_label">Overview</string>
     <string name="overview_card_pic_label">Pokemon front image</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>
