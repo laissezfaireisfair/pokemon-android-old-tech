@@ -32,23 +32,15 @@ class OverviewScreenViewModel : ViewModel(), KoinComponent {
         MutableLiveData<List<OverviewScreenEntry>>()
     val entries: LiveData<List<OverviewScreenEntry>> = _entries
 
-    fun reloadFromRandomPage() {
-        TODO()
-    }
-
-    fun loadNextPage() {
-        TODO()
-    }
-
-    fun changeSortByAttackStatus(newStatus: Boolean) {
-        TODO()
-    }
-
-    fun changeSortByDefenceStatus(newStatus: Boolean) {
-        TODO()
-    }
-
-    fun changeSortByHpStatus(newStatus: Boolean) {
-        TODO()
+    init {
+        _entries.value = listOf(
+            OverviewScreenEntry(
+                name = "name",
+                imageUrl = "",
+                attack = 1,
+                defense = 1,
+                hp = 1
+            )
+        )
     }
 }
