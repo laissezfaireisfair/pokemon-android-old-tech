@@ -63,24 +63,14 @@ private class EndReachListener(
     private val layoutManager: LinearLayoutManager,
     private val callback: () -> Unit
 ) : RecyclerView.OnScrollListener() {
-    var isAlreadyReported = false
-
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-        super.onScrolled(recyclerView, dx, dy)
+    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+        super.onScrollStateChanged(recyclerView, newState)
 
         val buffer = 5
-        val visibleItemsCount = recyclerView.childCount
         val totalItemsCount = layoutManager.itemCount
-        val lastVisibleItem = layoutManager.findFirstVisibleItemPosition() + visibleItemsCount - 1
+        val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
         val isEndReached = lastVisibleItem + buffer > totalItemsCount
 
-        if (isEndReached) {
-            if (!isAlreadyReported) {
-                isAlreadyReported = true
-                callback()
-            }
-        } else {
-            isAlreadyReported = false
-        }
+        if (isEndReached) callback()
     }
 }
