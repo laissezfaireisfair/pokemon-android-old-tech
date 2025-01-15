@@ -33,6 +33,13 @@ class OverviewFragment : Fragment() {
             binding.errorMessage.text = viewModel.error.value
         }
 
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            binding.errorHeader.isVisible = viewModel.isLoading.value!!.not()
+            binding.errorMessage.isVisible = viewModel.isLoading.value!!.not()
+            binding.pokemonRv.isVisible = viewModel.isLoading.value!!.not()
+            binding.loadingIndicator.isVisible = viewModel.isLoading.value!!
+        }
+
         val layoutManager = LinearLayoutManager(requireContext())
         binding.pokemonRv.layoutManager = layoutManager
 
@@ -41,10 +48,7 @@ class OverviewFragment : Fragment() {
         }
 
         binding.pokemonRv.addOnScrollListener(
-            EndReachListener(
-                layoutManager,
-                viewModel::startLoadingNextPage
-            )
+            EndReachListener(layoutManager, viewModel::startLoadingNextPage)
         )
 
         return binding.root
@@ -59,9 +63,7 @@ private class EndReachListener(
     private val layoutManager: LinearLayoutManager,
     private val callback: () -> Unit
 ) : RecyclerView.OnScrollListener() {
-    companion object {
-        var isAlreadyReported = false
-    }
+    var isAlreadyReported = false
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
