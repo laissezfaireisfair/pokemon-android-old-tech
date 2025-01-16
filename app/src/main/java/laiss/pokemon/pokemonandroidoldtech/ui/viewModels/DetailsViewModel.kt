@@ -3,6 +3,7 @@ package laiss.pokemon.pokemonandroidoldtech.ui.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import laiss.pokemon.pokemonandroidoldtech.data.IPokemonRepository
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import org.koin.core.component.KoinComponent
@@ -21,6 +22,12 @@ class DetailsViewModel(pokemonName: String) : ViewModel(), KoinComponent {
 
     private val _lastError = MutableLiveData<String?>()
     val lastError: LiveData<String?> = _lastError
+
+    class Factory(private val pokemonName: String) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>) =
+            DetailsViewModel(pokemonName) as T
+    }
 
     init {
         _state.value = State.Loading

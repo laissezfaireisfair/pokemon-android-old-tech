@@ -30,35 +30,43 @@ class OverviewFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (viewModel.state.value) {
                 OverviewViewModel.State.Loading -> {
-                    binding.errorHeader.isVisible = false
-                    binding.errorMessage.isVisible = false
-                    binding.pokemonRv.isVisible = false
-                    binding.loadingIndicator.isVisible = true
-                    binding.loadingNextPageIndicator.isVisible = false
+                    with (binding) {
+                        errorHeader.isVisible = false
+                        errorMessage.isVisible = false
+                        pokemonRv.isVisible = false
+                        loadingIndicator.isVisible = true
+                        loadingNextPageIndicator.isVisible = false
+                    }
                 }
 
                 OverviewViewModel.State.Error -> {
-                    binding.errorHeader.isVisible = true
-                    binding.errorMessage.isVisible = true
-                    binding.pokemonRv.isVisible = false
-                    binding.loadingIndicator.isVisible = false
-                    binding.loadingNextPageIndicator.isVisible = false
+                    with (binding) {
+                        errorHeader.isVisible = true
+                        errorMessage.isVisible = true
+                        pokemonRv.isVisible = false
+                        loadingIndicator.isVisible = false
+                        loadingNextPageIndicator.isVisible = false
+                    }
                 }
 
                 OverviewViewModel.State.Presenting -> {
-                    binding.errorHeader.isVisible = false
-                    binding.errorMessage.isVisible = false
-                    binding.pokemonRv.isVisible = true
-                    binding.loadingIndicator.isVisible = false
-                    binding.loadingNextPageIndicator.isVisible = false
+                    with (binding) {
+                        errorHeader.isVisible = false
+                        errorMessage.isVisible = false
+                        pokemonRv.isVisible = true
+                        loadingIndicator.isVisible = false
+                        loadingNextPageIndicator.isVisible = false
+                    }
                 }
 
                 OverviewViewModel.State.LoadingAdditionalPage -> {
-                    binding.errorHeader.isVisible = false
-                    binding.errorMessage.isVisible = false
-                    binding.pokemonRv.isVisible = true
-                    binding.loadingIndicator.isVisible = false
-                    binding.loadingNextPageIndicator.isVisible = true
+                    with (binding) {
+                        errorHeader.isVisible = false
+                        errorMessage.isVisible = false
+                        pokemonRv.isVisible = true
+                        loadingIndicator.isVisible = false
+                        loadingNextPageIndicator.isVisible = true
+                    }
                 }
 
                 null -> error("LiveData of non-nullable type shouldn't provide null")
