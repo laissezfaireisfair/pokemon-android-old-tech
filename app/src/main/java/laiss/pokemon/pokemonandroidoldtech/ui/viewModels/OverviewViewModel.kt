@@ -8,6 +8,9 @@ import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+
+private const val MIN_ON_PAGE = 30
+
 class OverviewViewModel : ViewModel(), KoinComponent {
     private val pokemonRepository: IPokemonRepository by inject()
 
@@ -36,6 +39,13 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         pokemonRepository.getPage(page + 1, pagingOffset, ::onPageLoaded)
     }
 
+    fun refreshFromRandomPlace() {
+        // TODO: Await end of possible loading
+        _state.value = State.Loading
+        _pokemonList.value = emptyList()
+        pokemonRepository.getRandomPageNumberAndOffset(::onRandomNumberAndOffsetReceived)
+    }
+
     private fun onPageLoaded(newPageResult: Result<List<Pokemon>>) {
         try {
             val newPage = newPageResult.getOrThrow()
@@ -44,6 +54,29 @@ class OverviewViewModel : ViewModel(), KoinComponent {
             _pokemonList.value = pokemonList.value!! + newPage
             _state.value = State.Presenting
             ++page
+        } catch (exception: Exception) {
+            _lastError.value = exception.message
+            _state.value = State.Error
+        }
+    }
+
+    private fun onRandomNumberAndOffsetReceived(result: Result<Pair<Int, Int>>) = try {
+        val (newPage, newPagingOffset) = result.getOrThrow()
+        pokemonRepository.getPage(newPage, newPagingOffset, ::onRandomPageLoaded)
+        page = newPage
+        pagingOffset = newPagingOffset
+
+    } catch (exception: Exception) {
+        _lastError.value = exception.message
+        _state.value = State.Error
+    }
+
+    private fun onRandomPageLoaded(result: Result<List<Pokemon>>) {
+        try {
+            val entries = result.getOrThrow()
+            _pokemonList.value = entries
+            _state.value = State.Presenting
+            if (entries.size < MIN_ON_PAGE) pokemonRepository.getPage(0, 0, ::onPageLoaded)
         } catch (exception: Exception) {
             _lastError.value = exception.message
             _state.value = State.Error

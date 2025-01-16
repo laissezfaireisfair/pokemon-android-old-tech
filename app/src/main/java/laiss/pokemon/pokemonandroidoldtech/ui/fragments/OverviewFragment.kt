@@ -30,7 +30,7 @@ class OverviewFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (viewModel.state.value) {
                 OverviewViewModel.State.Loading -> {
-                    with (binding) {
+                    with(binding) {
                         errorHeader.isVisible = false
                         errorMessage.isVisible = false
                         pokemonRv.isVisible = false
@@ -40,7 +40,7 @@ class OverviewFragment : Fragment() {
                 }
 
                 OverviewViewModel.State.Error -> {
-                    with (binding) {
+                    with(binding) {
                         errorHeader.isVisible = true
                         errorMessage.isVisible = true
                         pokemonRv.isVisible = false
@@ -50,7 +50,7 @@ class OverviewFragment : Fragment() {
                 }
 
                 OverviewViewModel.State.Presenting -> {
-                    with (binding) {
+                    with(binding) {
                         errorHeader.isVisible = false
                         errorMessage.isVisible = false
                         pokemonRv.isVisible = true
@@ -60,7 +60,7 @@ class OverviewFragment : Fragment() {
                 }
 
                 OverviewViewModel.State.LoadingAdditionalPage -> {
-                    with (binding) {
+                    with(binding) {
                         errorHeader.isVisible = false
                         errorMessage.isVisible = false
                         pokemonRv.isVisible = true
@@ -90,6 +90,8 @@ class OverviewFragment : Fragment() {
         binding.pokemonRv.addOnScrollListener(
             EndReachListener(layoutManager, viewModel::startLoadingNextPage)
         )
+
+        binding.fab.setOnClickListener { viewModel.refreshFromRandomPlace() }
 
         return binding.root
     }
