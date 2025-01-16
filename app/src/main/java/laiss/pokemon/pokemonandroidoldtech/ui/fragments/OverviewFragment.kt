@@ -5,11 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import laiss.pokemon.pokemonandroidoldtech.R
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.databinding.OverviewFragmentBinding
 import laiss.pokemon.pokemonandroidoldtech.ui.adapters.PokemonAdapter
@@ -86,7 +87,8 @@ class OverviewFragment : Fragment() {
     }
 
     private fun onPokemonClicked(pokemon: Pokemon) {
-        Toast.makeText(activity, "Pokemon ${pokemon.name} clicked", Toast.LENGTH_SHORT).show()
+        val bundle = Bundle().apply { putString("pokemonName", pokemon.name) }
+        findNavController().navigate(R.id.action_OverviewFragment_to_detailsFragment, bundle)
     }
 }
 

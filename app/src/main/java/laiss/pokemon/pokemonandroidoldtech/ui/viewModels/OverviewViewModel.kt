@@ -28,12 +28,7 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         pokemonRepository.getPage(0, 0, ::onPageLoaded)
     }
 
-    enum class State {
-        Loading,
-        Error,
-        Presenting,
-        LoadingAdditionalPage
-    }
+    enum class State { Loading, Error, Presenting, LoadingAdditionalPage }
 
     fun startLoadingNextPage() {
         if (isEndReached || state.value != State.Presenting) return
@@ -49,8 +44,7 @@ class OverviewViewModel : ViewModel(), KoinComponent {
             _pokemonList.value = pokemonList.value!! + newPage
             _state.value = State.Presenting
             ++page
-        }
-        catch (exception: Exception) {
+        } catch (exception: Exception) {
             _lastError.value = exception.message
             _state.value = State.Error
         }

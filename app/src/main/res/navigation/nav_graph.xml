@@ -9,5 +9,18 @@
         android:id="@+id/OverviewFragment"
         android:name="laiss.pokemon.pokemonandroidoldtech.ui.fragments.OverviewFragment"
         android:label="@string/overview_fragment_label"
-        tools:layout="@layout/overview_fragment"/>
+        tools:layout="@layout/overview_fragment">
+        <action
+            android:id="@+id/action_OverviewFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="laiss.pokemon.pokemonandroidoldtech.ui.fragments.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="pokemonName"
+            app:argType="string"/>
+    </fragment>
 </navigation>

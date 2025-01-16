@@ -6,4 +6,14 @@
     <string name="overview_card_pic_label">Pokemon front image</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="loading">Loading...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="details_front_image_label">Front image</string>
+    <string name="height_icon_label">Height</string>
+    <string name="height_units">cm</string>
+    <string name="weight_units">kg</string>
+    <string name="weight_icon_label">Weight</string>
+    <string name="attack_icon_label">Attack</string>
+    <string name="defence_icon_label">Defence</string>
+    <string name="hp_icon_label">Hp</string>
 </resources>
