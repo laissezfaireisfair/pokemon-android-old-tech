@@ -33,6 +33,7 @@ class OverviewFragment : Fragment() {
                     binding.errorMessage.isVisible = false
                     binding.pokemonRv.isVisible = false
                     binding.loadingIndicator.isVisible = true
+                    binding.loadingNextPageIndicator.isVisible = false
                 }
 
                 OverviewViewModel.State.Error -> {
@@ -40,6 +41,7 @@ class OverviewFragment : Fragment() {
                     binding.errorMessage.isVisible = true
                     binding.pokemonRv.isVisible = false
                     binding.loadingIndicator.isVisible = false
+                    binding.loadingNextPageIndicator.isVisible = false
                 }
 
                 OverviewViewModel.State.Presenting -> {
@@ -47,13 +49,15 @@ class OverviewFragment : Fragment() {
                     binding.errorMessage.isVisible = false
                     binding.pokemonRv.isVisible = true
                     binding.loadingIndicator.isVisible = false
+                    binding.loadingNextPageIndicator.isVisible = false
                 }
 
                 OverviewViewModel.State.LoadingAdditionalPage -> {
                     binding.errorHeader.isVisible = false
                     binding.errorMessage.isVisible = false
                     binding.pokemonRv.isVisible = true
-                    binding.loadingIndicator.isVisible = true
+                    binding.loadingIndicator.isVisible = false
+                    binding.loadingNextPageIndicator.isVisible = true
                 }
 
                 null -> error("LiveData of non-nullable type shouldn't provide null")
