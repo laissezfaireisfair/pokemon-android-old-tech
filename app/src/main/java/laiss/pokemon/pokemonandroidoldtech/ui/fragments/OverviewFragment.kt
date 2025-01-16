@@ -26,18 +26,42 @@ class OverviewFragment : Fragment() {
     ): View {
         binding = OverviewFragmentBinding.inflate(inflater, container, false)
 
-        viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorHeader.isVisible = viewModel.error.value != null
-            binding.errorMessage.isVisible = viewModel.error.value != null
-            binding.pokemonRv.isVisible = viewModel.error.value == null
-            binding.errorMessage.text = viewModel.error.value
+        viewModel.state.observe(viewLifecycleOwner) {
+            when (viewModel.state.value) {
+                OverviewViewModel.State.Loading -> {
+                    binding.errorHeader.isVisible = false
+                    binding.errorMessage.isVisible = false
+                    binding.pokemonRv.isVisible = false
+                    binding.loadingIndicator.isVisible = true
+                }
+
+                OverviewViewModel.State.Error -> {
+                    binding.errorHeader.isVisible = true
+                    binding.errorMessage.isVisible = true
+                    binding.pokemonRv.isVisible = false
+                    binding.loadingIndicator.isVisible = false
+                }
+
+                OverviewViewModel.State.Presenting -> {
+                    binding.errorHeader.isVisible = false
+                    binding.errorMessage.isVisible = false
+                    binding.pokemonRv.isVisible = true
+                    binding.loadingIndicator.isVisible = false
+                }
+
+                OverviewViewModel.State.LoadingAdditionalPage -> {
+                    binding.errorHeader.isVisible = false
+                    binding.errorMessage.isVisible = false
+                    binding.pokemonRv.isVisible = true
+                    binding.loadingIndicator.isVisible = true
+                }
+
+                null -> error("LiveData of non-nullable type shouldn't provide null")
+            }
         }
 
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            binding.errorHeader.isVisible = viewModel.isLoading.value!!.not()
-            binding.errorMessage.isVisible = viewModel.isLoading.value!!.not()
-            binding.pokemonRv.isVisible = viewModel.isLoading.value!!.not()
-            binding.loadingIndicator.isVisible = viewModel.isLoading.value!!
+        viewModel.lastError.observe(viewLifecycleOwner) {
+            binding.errorMessage.text = viewModel.lastError.value
         }
 
         val layoutManager = LinearLayoutManager(requireContext())

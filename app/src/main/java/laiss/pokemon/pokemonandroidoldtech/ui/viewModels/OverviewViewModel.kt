@@ -18,20 +18,26 @@ class OverviewViewModel : ViewModel(), KoinComponent {
     private val _pokemonList = MutableLiveData(emptyList<Pokemon>())
     val pokemonList: LiveData<List<Pokemon>> = _pokemonList
 
-    private val _isLoading = MutableLiveData<Boolean>(false)
-    val isLoading: LiveData<Boolean> = _isLoading
+    private val _state = MutableLiveData(State.Loading)
+    val state: LiveData<State> = _state
 
-    private val _error = MutableLiveData<String?>(null)
-    val error: LiveData<String?> = _error
+    private val _lastError = MutableLiveData<String?>(null)
+    val lastError: LiveData<String?> = _lastError
 
     init {
-        _isLoading.value = true
         pokemonRepository.getPage(0, 0, ::onPageLoaded)
     }
 
+    enum class State {
+        Loading,
+        Error,
+        Presenting,
+        LoadingAdditionalPage
+    }
+
     fun startLoadingNextPage() {
-        if (isEndReached || isLoading.value!!) return
-        _isLoading.value = true
+        if (isEndReached || state.value != State.Presenting) return
+        _state.value = State.LoadingAdditionalPage
         pokemonRepository.getPage(page + 1, pagingOffset, ::onPageLoaded)
     }
 
@@ -41,12 +47,12 @@ class OverviewViewModel : ViewModel(), KoinComponent {
             if (newPage.isEmpty())
                 isEndReached = true
             _pokemonList.value = pokemonList.value!! + newPage
+            _state.value = State.Presenting
+            ++page
         }
         catch (exception: Exception) {
-            _error.value = exception.message
-        }
-        finally {
-            _isLoading.value = false
+            _lastError.value = exception.message
+            _state.value = State.Error
         }
     }
 }
