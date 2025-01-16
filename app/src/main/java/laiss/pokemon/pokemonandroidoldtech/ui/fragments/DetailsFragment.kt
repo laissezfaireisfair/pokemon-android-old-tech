@@ -35,17 +35,23 @@ class DetailsFragment : Fragment() {
         val binding = FragmentDetailsBinding.inflate(inflater, container, false)
 
         viewModel.state.observe(viewLifecycleOwner) {
-            when (viewModel.state.value) {  // TODO: Bind loading and error views visibility
+            when (viewModel.state.value) {
                 DetailsViewModel.State.Loading -> {
                     binding.card.isVisible = false
+                    binding.errorLayout.isVisible = false
+                    binding.loadingIndicator.isVisible = true
                 }
 
                 DetailsViewModel.State.Error -> {
                     binding.card.isVisible = false
+                    binding.errorLayout.isVisible = true
+                    binding.loadingIndicator.isVisible = false
                 }
 
                 DetailsViewModel.State.Presenting -> {
                     binding.card.isVisible = true
+                    binding.errorLayout.isVisible = false
+                    binding.loadingIndicator.isVisible = false
                 }
 
                 null -> error("LiveData of non-nullable type shouldn't provide null")
@@ -53,11 +59,11 @@ class DetailsFragment : Fragment() {
         }
 
         viewModel.lastError.observe(viewLifecycleOwner) {
-            // TODO: Bind to error view
+            binding.errorMessage.text = viewModel.lastError.value
         }
 
         viewModel.pokemon.observe(viewLifecycleOwner) {
-            with (viewModel.pokemon.value) {
+            with(viewModel.pokemon.value) {
                 if (this == null) return@observe
 
                 Glide.with(requireContext()).load(imageUrl).into(binding.frontImage)
