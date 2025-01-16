@@ -18,4 +18,7 @@
     <string name="hp_icon_label">Hp</string>
     <string name="overview_fab_label">Refresh from random place</string>
     <string name="details_label">Details</string>
+    <string name="attack_sort_checkbox_label">Attack</string>
+    <string name="defense_sort_checkbox_label">Defense</string>
+    <string name="hp_sort_checkbox_label">Hp</string>
 </resources>

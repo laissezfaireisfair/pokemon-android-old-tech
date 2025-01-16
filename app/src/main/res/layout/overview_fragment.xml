@@ -10,6 +10,36 @@
     app:layout_constraintVertical_bias="0.5"
     tools:context=".ui.fragments.OverviewFragment">
 
+    <CheckBox
+        android:id="@+id/attack_sort_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/attack_sort_checkbox_label"
+        android:textColor="@color/text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/defense_sort_checkbox"/>
+
+    <CheckBox
+        android:id="@+id/defense_sort_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/defense_sort_checkbox_label"
+        android:textColor="@color/text"
+        app:layout_constraintStart_toEndOf="@id/attack_sort_checkbox"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/hp_sort_checkbox"/>
+
+    <CheckBox
+        android:id="@+id/hp_sort_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hp_sort_checkbox_label"
+        android:textColor="@color/text"
+        app:layout_constraintStart_toEndOf="@id/defense_sort_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/errorHeader"
         android:layout_width="wrap_content"
@@ -35,17 +65,17 @@
         android:id="@+id/loading_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pokemonRv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/loading_next_page_indicator"
+        app:layout_constraintTop_toBottomOf="@id/defense_sort_checkbox"
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="28dp" />
 
@@ -54,18 +84,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        android:contentDescription="@string/overview_fab_label"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@drawable/dices" />
+        android:contentDescription="@string/overview_fab_label"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/dices"
+        android:backgroundTint="?colorPrimary"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

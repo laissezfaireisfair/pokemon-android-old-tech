@@ -32,6 +32,15 @@ class OverviewViewModel() : ViewModel(), KoinComponent {
     private val _lastError = MutableLiveData<String?>(null)
     val lastError: LiveData<String?> = _lastError
 
+    private val _isAttackSortChecked = MutableLiveData(false)
+    val isAttackSortChecked: LiveData<Boolean> = _isAttackSortChecked
+
+    private val _isDefenseSortChecked = MutableLiveData(false)
+    val isDefenseSortChecked: LiveData<Boolean> = _isDefenseSortChecked
+
+    private val _isHpSortChecked = MutableLiveData(false)
+    val isHpSortChecked: LiveData<Boolean> = _isHpSortChecked
+
     init {
         pokemonRepository.getPage(0, 0, ::onPageLoaded)
     }
@@ -55,6 +64,18 @@ class OverviewViewModel() : ViewModel(), KoinComponent {
         _state.value = State.Loading
         _pokemonList.value = emptyList()
         pokemonRepository.getRandomPageNumberAndOffset(::onRandomNumberAndOffsetReceived)
+    }
+
+    fun onAttackSortChecked(isChecked: Boolean){
+        _isAttackSortChecked.value = isChecked  // TODO: Implement sort
+    }
+
+    fun onDefenseSortChecked(isChecked: Boolean){
+        _isDefenseSortChecked.value = isChecked
+    }
+
+    fun onHpSortChecked(isChecked: Boolean){
+        _isHpSortChecked.value = isChecked
     }
 
     private fun onPageLoaded(newPageResult: Result<List<Pokemon>>) {

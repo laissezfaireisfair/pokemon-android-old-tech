@@ -5,11 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButton.OnCheckedChangeListener
 import laiss.pokemon.pokemonandroidoldtech.R
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.databinding.OverviewFragmentBinding
@@ -93,6 +96,10 @@ class OverviewFragment : Fragment() {
 
         binding.fab.setOnClickListener { viewModel.refreshFromRandomPlace() }
 
+        binding.attackSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onAttackSortChecked))
+        binding.defenseSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onDefenseSortChecked))
+        binding.hpSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onHpSortChecked))
+
         return binding.root
     }
 
@@ -115,5 +122,12 @@ private class EndReachListener(
         val isEndReached = lastVisibleItem + buffer > totalItemsCount
 
         if (isEndReached) callback()
+    }
+}
+
+private class OnCheckedListener(private val delegate: (Boolean) -> Unit) :
+    CompoundButton.OnCheckedChangeListener {
+    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+        delegate(isChecked)
     }
 }
