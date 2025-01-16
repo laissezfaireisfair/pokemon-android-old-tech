@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.allViews
 import androidx.core.view.isVisible
+import androidx.core.view.marginEnd
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import laiss.pokemon.pokemonandroidoldtech.R
@@ -73,7 +76,13 @@ class DetailsFragment : Fragment() {
                 binding.attack.text = "$attack"
                 binding.defence.text = "$defense"
                 binding.hp.text = "$hp"
-                // TODO: Add types
+
+                binding.typesList.removeAllViews()
+                types.forEach {
+                    binding.typesList.addView(TextView(requireContext(),).apply {
+                        text = it.typeString
+                    })
+                }
             }
         }
 

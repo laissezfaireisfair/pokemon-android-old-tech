@@ -10,22 +10,22 @@
         android:id="@+id/error_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/errorHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/something_went_wrong"
-            android:textColor="?colorError"/>
+            android:textColor="?colorError" />
 
         <TextView
             android:id="@+id/error_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/subtext0"
-            tools:text="404 Not Found"/>
+            tools:text="404 Not Found" />
 
     </LinearLayout>
 
@@ -33,7 +33,7 @@
         android:id="@+id/loading_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
@@ -50,120 +50,130 @@
                 android:id="@+id/front_image"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
+                android:layout_margin="4dp"
+                android:contentDescription="@string/details_front_image_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/details_front_image_label"
-                android:layout_margin="4dp"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/name"
-                app:layout_constraintTop_toBottomOf="@id/front_image"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Bulbasaur"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/front_image"
+                tools:text="Bulbasaur" />
 
             <ImageView
                 android:id="@+id/height_icon"
-                android:contentDescription="@string/height_icon_label"
-                app:layout_constraintTop_toBottomOf="@id/name"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                app:srcCompat="@drawable/height"/>
+                android:contentDescription="@string/height_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                app:srcCompat="@drawable/height" />
 
             <TextView
                 android:id="@+id/height"
-                app:layout_constraintTop_toTopOf="@id/height_icon"
-                app:layout_constraintStart_toEndOf="@id/height_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="7.0"/>
+                app:layout_constraintStart_toEndOf="@id/height_icon"
+                app:layout_constraintTop_toTopOf="@id/height_icon"
+                tools:text="7.0" />
 
             <TextView
                 android:id="@+id/height_units"
-                app:layout_constraintTop_toTopOf="@id/height"
-                app:layout_constraintStart_toEndOf="@id/height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/height_units"/>
+                android:text="@string/height_units"
+                app:layout_constraintStart_toEndOf="@id/height"
+                app:layout_constraintTop_toTopOf="@id/height" />
 
             <ImageView
                 android:id="@+id/weight_icon"
-                android:contentDescription="@string/weight_icon_label"
-                app:layout_constraintTop_toBottomOf="@id/height_icon"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                app:srcCompat="@drawable/weight"/>
+                android:contentDescription="@string/weight_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/height_icon"
+                app:srcCompat="@drawable/weight" />
 
             <TextView
                 android:id="@+id/weight"
-                app:layout_constraintTop_toTopOf="@id/weight_icon"
-                app:layout_constraintStart_toEndOf="@id/weight_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="69.0"/>
+                app:layout_constraintStart_toEndOf="@id/weight_icon"
+                app:layout_constraintTop_toTopOf="@id/weight_icon"
+                tools:text="69.0" />
 
             <TextView
                 android:id="@+id/weight_units"
-                app:layout_constraintTop_toTopOf="@id/weight"
-                app:layout_constraintStart_toEndOf="@id/weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/weight_units"/>
+                android:text="@string/weight_units"
+                app:layout_constraintStart_toEndOf="@id/weight"
+                app:layout_constraintTop_toTopOf="@id/weight" />
 
             <ImageView
                 android:id="@+id/attack_icon"
-                android:contentDescription="@string/attack_icon_label"
-                app:layout_constraintTop_toBottomOf="@id/weight_icon"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                app:srcCompat="@drawable/attack"/>
+                android:contentDescription="@string/attack_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weight_icon"
+                app:srcCompat="@drawable/attack" />
 
             <TextView
                 android:id="@+id/attack"
-                app:layout_constraintTop_toTopOf="@id/attack_icon"
-                app:layout_constraintStart_toEndOf="@id/attack_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="49.0"/>
+                app:layout_constraintStart_toEndOf="@id/attack_icon"
+                app:layout_constraintTop_toTopOf="@id/attack_icon"
+                tools:text="49.0" />
 
             <ImageView
                 android:id="@+id/defence_icon"
-                android:contentDescription="@string/defence_icon_label"
-                app:layout_constraintTop_toBottomOf="@id/attack_icon"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                app:srcCompat="@drawable/defense"/>
+                android:contentDescription="@string/defence_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/attack_icon"
+                app:srcCompat="@drawable/defense" />
 
             <TextView
                 android:id="@+id/defence"
-                app:layout_constraintTop_toTopOf="@id/defence_icon"
-                app:layout_constraintStart_toEndOf="@id/defence_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="49.0"/>
+                app:layout_constraintStart_toEndOf="@id/defence_icon"
+                app:layout_constraintTop_toTopOf="@id/defence_icon"
+                tools:text="49.0" />
 
             <ImageView
                 android:id="@+id/hp_icon"
-                android:contentDescription="@string/hp_icon_label"
-                app:layout_constraintTop_toBottomOf="@id/defence_icon"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                app:srcCompat="@drawable/hp"/>
+                android:contentDescription="@string/hp_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/defence_icon"
+                app:srcCompat="@drawable/hp" />
 
             <TextView
                 android:id="@+id/hp"
-                app:layout_constraintTop_toTopOf="@id/hp_icon"
-                app:layout_constraintStart_toEndOf="@id/hp_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="45.0"/>
+                app:layout_constraintStart_toEndOf="@id/hp_icon"
+                app:layout_constraintTop_toTopOf="@id/hp_icon"
+                tools:text="45.0" />
+
+            <LinearLayout
+                android:id="@+id/types_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/hp_icon"
+                android:showDividers="middle"
+                android:divider="@drawable/vertical_divider"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
