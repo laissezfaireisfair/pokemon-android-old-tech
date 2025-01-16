@@ -1,5 +1,7 @@
 package laiss.pokemon.pokemonandroidoldtech.ui.viewModels
 
+import android.os.AsyncTask
+import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,16 +9,19 @@ import laiss.pokemon.pokemonandroidoldtech.data.IPokemonRepository
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.concurrent.thread
 
 
 private const val MIN_ON_PAGE = 30
 
-class OverviewViewModel : ViewModel(), KoinComponent {
+class OverviewViewModel() : ViewModel(), KoinComponent {
     private val pokemonRepository: IPokemonRepository by inject()
+    private val uiHandler: Handler by inject()
 
     private var isEndReached = false
     private var page = 0
     private var pagingOffset = 0
+    private var isRefreshRequested = false
 
     private val _pokemonList = MutableLiveData(emptyList<Pokemon>())
     val pokemonList: LiveData<List<Pokemon>> = _pokemonList
@@ -40,7 +45,13 @@ class OverviewViewModel : ViewModel(), KoinComponent {
     }
 
     fun refreshFromRandomPlace() {
-        // TODO: Await end of possible loading
+        if (isRefreshRequested) return
+        isRefreshRequested = true
+
+        if (state.value == State.Loading) {
+            waitForLoadingComplete(::refreshFromRandomPlace)
+            return
+        }
         _state.value = State.Loading
         _pokemonList.value = emptyList()
         pokemonRepository.getRandomPageNumberAndOffset(::onRandomNumberAndOffsetReceived)
@@ -80,6 +91,16 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         } catch (exception: Exception) {
             _lastError.value = exception.message
             _state.value = State.Error
+        } finally {
+            isRefreshRequested = false
+        }
+    }
+
+    private fun waitForLoadingComplete(callback: () -> Unit) {
+        thread {
+            while (state.value == State.Loading)
+                Thread.sleep(100)
+            uiHandler.post { callback() }
         }
     }
 }
