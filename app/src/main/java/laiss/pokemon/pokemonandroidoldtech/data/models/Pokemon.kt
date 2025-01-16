@@ -30,7 +30,7 @@ enum class PokemonType(val typeString: String) {
     }
 }
 
-class Pokemon(
+data class Pokemon(
     val id: Int,
     val name: String,
     val imageUrl: String?,

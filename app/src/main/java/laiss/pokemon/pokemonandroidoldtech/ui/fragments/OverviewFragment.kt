@@ -67,8 +67,11 @@ class OverviewFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireContext())
         binding.pokemonRv.layoutManager = layoutManager
 
+        val pokemonAdapter = PokemonAdapter(requireContext(), ::onPokemonClicked)
+        binding.pokemonRv.adapter = pokemonAdapter
+
         viewModel.pokemonList.observe(viewLifecycleOwner) {
-            binding.pokemonRv.adapter = PokemonAdapter(requireContext(), it, ::onPokemonClicked)
+            pokemonAdapter.submitList(it)
         }
 
         binding.pokemonRv.addOnScrollListener(
