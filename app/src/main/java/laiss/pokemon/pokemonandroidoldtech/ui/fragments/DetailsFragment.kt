@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import laiss.pokemon.pokemonandroidoldtech.R
 import laiss.pokemon.pokemonandroidoldtech.databinding.FragmentDetailsBinding
 import laiss.pokemon.pokemonandroidoldtech.ui.viewModels.DetailsViewModel
+import laiss.pokemon.pokemonandroidoldtech.utils.capitalize
 
 private const val POKEMON_NAME_PARAM = "pokemonName"
 
@@ -70,7 +71,7 @@ class DetailsFragment : Fragment() {
                 if (this == null) return@observe
 
                 Glide.with(requireContext()).load(imageUrl).into(binding.frontImage)
-                binding.name.text = name
+                binding.name.text = name.capitalize()
                 binding.height.text = "${heightDm * 10}"
                 binding.weight.text = "${weightHg / 10.0}"
                 binding.attack.text = "$attack"

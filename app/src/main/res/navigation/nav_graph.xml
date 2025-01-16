@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="laiss.pokemon.pokemonandroidoldtech.ui.fragments.DetailsFragment"
-        android:label="fragment_details"
+        android:label="@string/details_label"
         tools:layout="@layout/fragment_details">
         <argument
             android:name="pokemonName"

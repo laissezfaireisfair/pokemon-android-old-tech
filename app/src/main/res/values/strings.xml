@@ -17,4 +17,5 @@
     <string name="defence_icon_label">Defence</string>
     <string name="hp_icon_label">Hp</string>
     <string name="overview_fab_label">Refresh from random place</string>
+    <string name="details_label">Details</string>
 </resources>

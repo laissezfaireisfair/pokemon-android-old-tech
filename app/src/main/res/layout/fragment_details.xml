@@ -37,12 +37,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_margin="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp">
 
@@ -56,10 +57,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/front_image" />
+
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="?colorPrimary"
+                android:textSize="25sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/front_image"
                 tools:text="Bulbasaur" />
@@ -68,10 +80,13 @@
                 android:id="@+id/height_icon"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/height_icon_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/name"
-                app:srcCompat="@drawable/height" />
+                app:srcCompat="@drawable/height"
+                app:tint="@color/text" />
 
             <TextView
                 android:id="@+id/height"
@@ -85,7 +100,9 @@
                 android:id="@+id/height_units"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:text="@string/height_units"
+                android:textColor="@color/subtext0"
                 app:layout_constraintStart_toEndOf="@id/height"
                 app:layout_constraintTop_toTopOf="@id/height" />
 
@@ -93,10 +110,13 @@
                 android:id="@+id/weight_icon"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/weight_icon_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/height_icon"
-                app:srcCompat="@drawable/weight" />
+                app:srcCompat="@drawable/weight"
+                app:tint="@color/text" />
 
             <TextView
                 android:id="@+id/weight"
@@ -110,7 +130,9 @@
                 android:id="@+id/weight_units"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:text="@string/weight_units"
+                android:textColor="@color/subtext0"
                 app:layout_constraintStart_toEndOf="@id/weight"
                 app:layout_constraintTop_toTopOf="@id/weight" />
 
@@ -118,10 +140,13 @@
                 android:id="@+id/attack_icon"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/attack_icon_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/weight_icon"
-                app:srcCompat="@drawable/attack" />
+                app:srcCompat="@drawable/attack"
+                app:tint="@color/text" />
 
             <TextView
                 android:id="@+id/attack"
@@ -129,16 +154,19 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/attack_icon"
                 app:layout_constraintTop_toTopOf="@id/attack_icon"
-                tools:text="49.0" />
+                tools:text="49" />
 
             <ImageView
                 android:id="@+id/defence_icon"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/defence_icon_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/attack_icon"
-                app:srcCompat="@drawable/defense" />
+                app:srcCompat="@drawable/defense"
+                app:tint="@color/text" />
 
             <TextView
                 android:id="@+id/defence"
@@ -146,16 +174,19 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/defence_icon"
                 app:layout_constraintTop_toTopOf="@id/defence_icon"
-                tools:text="49.0" />
+                tools:text="49" />
 
             <ImageView
                 android:id="@+id/hp_icon"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/hp_icon_label"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/defence_icon"
-                app:srcCompat="@drawable/hp" />
+                app:srcCompat="@drawable/hp"
+                app:tint="@color/text" />
 
             <TextView
                 android:id="@+id/hp"
@@ -163,17 +194,17 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/hp_icon"
                 app:layout_constraintTop_toTopOf="@id/hp_icon"
-                tools:text="45.0" />
+                tools:text="45" />
 
             <LinearLayout
                 android:id="@+id/types_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:divider="@drawable/vertical_divider"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hp_icon"
                 android:showDividers="middle"
-                android:divider="@drawable/vertical_divider"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/hp_icon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
