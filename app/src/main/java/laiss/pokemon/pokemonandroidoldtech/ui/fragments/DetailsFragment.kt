@@ -79,7 +79,7 @@ class DetailsFragment : Fragment() {
 
                 binding.typesList.removeAllViews()
                 types.forEach {
-                    binding.typesList.addView(TextView(requireContext(),).apply {
+                    binding.typesList.addView(TextView(requireContext()).apply {
                         text = it.typeString
                     })
                 }
