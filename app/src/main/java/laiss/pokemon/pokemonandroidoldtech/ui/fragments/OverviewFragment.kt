@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import laiss.pokemon.pokemonandroidoldtech.R
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.databinding.OverviewFragmentBinding
@@ -142,14 +144,10 @@ class OverviewFragment : Fragment() {
         findNavController().navigate(R.id.action_OverviewFragment_to_detailsFragment, bundle)
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.onScrollToTopRequested = {}
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         scope.cancel()
+        viewModel.onScrollToTopRequested = {}
     }
 }
 

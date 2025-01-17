@@ -108,27 +108,38 @@ class OverviewViewModel : ViewModel(), KoinComponent {
     }
 
     fun onAttackSortChecked(isChecked: Boolean) {
-        _isAttackSortChecked.value = isChecked
-        if (isChecked.not()) return
+        viewModelScope.launch {
+            _isAttackSortChecked.value = isChecked
+            if (isChecked.not()) return@launch
 
-        _pokemonList.value = pokemonList.value.sortedByDescending { it.attack }
-        onScrollToTopRequested()
+            _pokemonList.value = pokemonList.value.sortedByDescending { it.attack }
+            requestScrollToTop()
+        }
     }
 
     fun onDefenseSortChecked(isChecked: Boolean) {
-        _isDefenseSortChecked.value = isChecked
-        if (isChecked.not()) return
+        viewModelScope.launch {
+            _isDefenseSortChecked.value = isChecked
+            if (isChecked.not()) return@launch
 
-        _pokemonList.value = pokemonList.value.sortedByDescending { it.defense }
-        onScrollToTopRequested()
+            _pokemonList.value = pokemonList.value.sortedByDescending { it.defense }
+            requestScrollToTop()
+        }
     }
 
     fun onHpSortChecked(isChecked: Boolean) {
-        _isHpSortChecked.value = isChecked
-        if (isChecked.not()) return
+        viewModelScope.launch {
+            _isHpSortChecked.value = isChecked
+            if (isChecked.not()) return@launch
 
-        _pokemonList.value = pokemonList.value.sortedByDescending { it.hp }
-        onScrollToTopRequested()
+            _pokemonList.value = pokemonList.value.sortedByDescending { it.hp }
+            requestScrollToTop()
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
     }
 
     private fun dropSorts() {
@@ -137,8 +148,8 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         _isHpSortChecked.value = false
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.cancel()
+    private suspend fun requestScrollToTop() {
+        delay(100)
+        onScrollToTopRequested()
     }
 }
