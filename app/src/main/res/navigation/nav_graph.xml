@@ -21,6 +21,6 @@
         tools:layout="@layout/fragment_details">
         <argument
             android:name="pokemonName"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
 </navigation>

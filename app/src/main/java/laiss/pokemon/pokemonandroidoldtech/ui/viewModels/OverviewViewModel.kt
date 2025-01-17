@@ -1,6 +1,5 @@
 package laiss.pokemon.pokemonandroidoldtech.ui.viewModels
 
-import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
