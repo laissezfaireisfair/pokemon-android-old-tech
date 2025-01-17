@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import laiss.pokemon.pokemonandroidoldtech.databinding.FragmentDetailsBinding
 import laiss.pokemon.pokemonandroidoldtech.ui.viewModels.DetailsViewModel
@@ -94,5 +95,10 @@ class DetailsFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 }

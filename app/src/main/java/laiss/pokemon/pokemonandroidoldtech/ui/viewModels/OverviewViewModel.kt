@@ -2,6 +2,7 @@ package laiss.pokemon.pokemonandroidoldtech.ui.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -134,5 +135,10 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         _isAttackSortChecked.value = false
         _isDefenseSortChecked.value = false
         _isHpSortChecked.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
     }
 }
