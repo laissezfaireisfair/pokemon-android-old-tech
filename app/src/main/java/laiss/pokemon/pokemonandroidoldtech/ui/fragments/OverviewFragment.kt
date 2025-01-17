@@ -11,8 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.button.MaterialButton.OnCheckedChangeListener
 import laiss.pokemon.pokemonandroidoldtech.R
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.databinding.OverviewFragmentBinding
@@ -107,7 +105,7 @@ class OverviewFragment : Fragment() {
         }
 
         binding.pokemonRv.addOnScrollListener(
-            EndReachListener(layoutManager, viewModel::startLoadingNextPage)
+            EndReachListener(layoutManager, viewModel::loadNextPage)
         )
 
         viewModel.isAttackSortChecked.observe(viewLifecycleOwner) {

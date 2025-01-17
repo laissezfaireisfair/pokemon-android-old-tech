@@ -15,18 +15,8 @@ import java.util.concurrent.TimeUnit
 private val numberOfCores: Int by lazy { Runtime.getRuntime().availableProcessors() }
 
 val appModule = module {
-    single {
-        ThreadPoolExecutor(
-            numberOfCores,
-            numberOfCores,
-            1,
-            TimeUnit.SECONDS,
-            LinkedBlockingQueue()
-        )
-    }
-    single { HandlerCompat.createAsync(Looper.getMainLooper()) }
     single { OkHttpClient() }
     single { LocalStorageDataSource(get()) }
     single { PokeApiDataSource(get()) }
-    single<IPokemonRepository> { PokemonRepository(get(), get(), get(), get(), 30) }
+    single<IPokemonRepository> { PokemonRepository(get(), get(), 30) }
 }

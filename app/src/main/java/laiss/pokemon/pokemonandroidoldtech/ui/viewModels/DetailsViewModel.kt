@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import laiss.pokemon.pokemonandroidoldtech.data.IPokemonRepository
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import org.koin.core.component.KoinComponent
@@ -30,17 +32,15 @@ class DetailsViewModel(pokemonName: String) : ViewModel(), KoinComponent {
     }
 
     init {
-        _state.value = State.Loading
-        pokemonRepository.getPokemonByName(pokemonName, ::onPokemonLoaded)
-    }
-
-    private fun onPokemonLoaded(result: Result<Pokemon>) {
-        try {
-            _pokemon.value = result.getOrThrow()
-            _state.value = State.Presenting
-        } catch (exception: Exception) {
-            _lastError.value = exception.message
-            _state.value = State.Error
+        viewModelScope.launch {
+            try {
+                _state.value = State.Loading
+                _pokemon.value = pokemonRepository.getPokemonByName(pokemonName)
+                _state.value = State.Presenting
+            } catch (exception: Exception) {
+                _lastError.value = exception.message
+                _state.value = State.Error
+            }
         }
     }
 }

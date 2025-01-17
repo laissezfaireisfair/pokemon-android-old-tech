@@ -1,5 +1,9 @@
 package laiss.pokemon.pokemonandroidoldtech.data.dataSources
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
@@ -8,15 +12,17 @@ import java.io.IOException
 
 class PokeApiDataSource(private val client: OkHttpClient) {
     private val baseUrl = "https://pokeapi.co/api/v2"
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.IO + job)
 
-    fun getPokemonHeadersList(offset: Int, count: Int) =
+    suspend fun getPokemonHeadersList(offset: Int, count: Int) =
         preformGetRequest<PokemonHeadersListDto>("$baseUrl/pokemon/?limit=$count&offset=$offset")
 
-    fun getPokemon(name: String) = preformGetRequest<PokemonDto>("$baseUrl/pokemon/$name/")
+    suspend fun getPokemon(name: String) = preformGetRequest<PokemonDto>("$baseUrl/pokemon/$name/")
 
-    private inline fun <reified T> preformGetRequest(url: String): T {
+    private suspend inline fun <reified T> preformGetRequest(url: String) = scope.async {
         val request = Request.Builder().url(url).build()
-        return client.newCall(request).execute().use { response ->
+        client.newCall(request).execute().use { response ->
             if (response.isSuccessful.not()) throw IOException("Request failed: $response")
             response.body?.string()
         }?.let {
@@ -31,5 +37,5 @@ class PokeApiDataSource(private val client: OkHttpClient) {
                 throw IOException("Failed to deserialize: $exception")
             }
         } ?: throw IOException("Empty body received")
-    }
+    }.await()
 }
