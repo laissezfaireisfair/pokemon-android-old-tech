@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import laiss.pokemon.pokemonandroidoldtech.R
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.databinding.OverviewFragmentBinding
@@ -41,57 +39,57 @@ class OverviewFragment : Fragment() {
                 when (it) {
                     OverviewViewModel.State.Loading -> {
                         with(binding) {
-                            errorHeader.isVisible = false
-                            errorMessage.isVisible = false
-                            pokemonRv.isVisible = false
-                            loadingIndicator.isVisible = true
-                            loadingNextPageIndicator.isVisible = false
-                            attackSortCheckbox.isVisible = false
-                            defenseSortCheckbox.isVisible = false
-                            hpSortCheckbox.isVisible = false
-                            sortDivider.isVisible = false
+                            errorHeader.visibility = View.GONE
+                            errorMessage.visibility = View.GONE
+                            pokemonRv.visibility = View.INVISIBLE
+                            loadingIndicator.visibility = View.VISIBLE
+                            loadingNextPageIndicator.visibility = View.GONE
+                            attackSortCheckbox.visibility = View.INVISIBLE
+                            defenseSortCheckbox.visibility = View.INVISIBLE
+                            hpSortCheckbox.visibility = View.INVISIBLE
+                            sortDivider.visibility = View.INVISIBLE
                         }
                     }
 
                     OverviewViewModel.State.Error -> {
                         with(binding) {
-                            errorHeader.isVisible = true
-                            errorMessage.isVisible = true
-                            pokemonRv.isVisible = false
-                            loadingIndicator.isVisible = false
-                            loadingNextPageIndicator.isVisible = false
-                            attackSortCheckbox.isVisible = false
-                            defenseSortCheckbox.isVisible = false
-                            hpSortCheckbox.isVisible = false
-                            sortDivider.isVisible = false
+                            errorHeader.visibility = View.VISIBLE
+                            errorMessage.visibility = View.VISIBLE
+                            pokemonRv.visibility = View.GONE
+                            loadingIndicator.visibility = View.GONE
+                            loadingNextPageIndicator.visibility = View.GONE
+                            attackSortCheckbox.visibility = View.GONE
+                            defenseSortCheckbox.visibility = View.GONE
+                            hpSortCheckbox.visibility = View.GONE
+                            sortDivider.visibility = View.GONE
                         }
                     }
 
                     OverviewViewModel.State.Presenting -> {
                         with(binding) {
-                            errorHeader.isVisible = false
-                            errorMessage.isVisible = false
-                            pokemonRv.isVisible = true
-                            loadingIndicator.isVisible = false
-                            loadingNextPageIndicator.isVisible = false
-                            attackSortCheckbox.isVisible = true
-                            defenseSortCheckbox.isVisible = true
-                            hpSortCheckbox.isVisible = true
-                            sortDivider.isVisible = true
+                            errorHeader.visibility = View.GONE
+                            errorMessage.visibility = View.GONE
+                            pokemonRv.visibility = View.VISIBLE
+                            loadingIndicator.visibility = View.GONE
+                            loadingNextPageIndicator.visibility = View.GONE
+                            attackSortCheckbox.visibility = View.VISIBLE
+                            defenseSortCheckbox.visibility = View.VISIBLE
+                            hpSortCheckbox.visibility = View.VISIBLE
+                            sortDivider.visibility = View.VISIBLE
                         }
                     }
 
                     OverviewViewModel.State.LoadingAdditionalPage -> {
                         with(binding) {
-                            errorHeader.isVisible = false
-                            errorMessage.isVisible = false
-                            pokemonRv.isVisible = true
-                            loadingIndicator.isVisible = false
-                            loadingNextPageIndicator.isVisible = true
-                            attackSortCheckbox.isVisible = true
-                            defenseSortCheckbox.isVisible = true
-                            hpSortCheckbox.isVisible = true
-                            sortDivider.isVisible = true
+                            errorHeader.visibility = View.GONE
+                            pokemonRv.visibility = View.VISIBLE
+                            errorMessage.visibility = View.GONE
+                            loadingIndicator.visibility = View.GONE
+                            loadingNextPageIndicator.visibility = View.VISIBLE
+                            attackSortCheckbox.visibility = View.VISIBLE
+                            defenseSortCheckbox.visibility = View.VISIBLE
+                            hpSortCheckbox.visibility = View.VISIBLE
+                            sortDivider.visibility = View.VISIBLE
                         }
                     }
                 }

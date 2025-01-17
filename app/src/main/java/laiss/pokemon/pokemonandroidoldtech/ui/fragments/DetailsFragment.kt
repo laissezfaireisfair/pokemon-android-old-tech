@@ -46,25 +46,25 @@ class DetailsFragment : Fragment() {
                 when (it) {
                     DetailsViewModel.State.Loading -> {
                         with(binding) {
-                            card.isVisible = false
-                            errorLayout.isVisible = false
-                            loadingIndicator.isVisible = true
+                            card.visibility = View.INVISIBLE
+                            errorLayout.visibility = View.GONE
+                            loadingIndicator.visibility = View.VISIBLE
                         }
                     }
 
                     DetailsViewModel.State.Error -> {
                         with(binding) {
-                            card.isVisible = false
-                            errorLayout.isVisible = true
-                            loadingIndicator.isVisible = false
+                            card.visibility = View.INVISIBLE
+                            errorLayout.visibility = View.VISIBLE
+                            loadingIndicator.visibility = View.GONE
                         }
                     }
 
                     DetailsViewModel.State.Presenting -> {
                         with(binding) {
-                            card.isVisible = true
-                            errorLayout.isVisible = false
-                            loadingIndicator.isVisible = false
+                            card.visibility = View.VISIBLE
+                            errorLayout.visibility = View.GONE
+                            loadingIndicator.visibility = View.GONE
                         }
                     }
                 }
