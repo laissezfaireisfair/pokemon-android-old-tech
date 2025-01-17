@@ -39,6 +39,10 @@ class OverviewFragment : Fragment() {
                         pokemonRv.isVisible = false
                         loadingIndicator.isVisible = true
                         loadingNextPageIndicator.isVisible = false
+                        attackSortCheckbox.isVisible = false
+                        defenseSortCheckbox.isVisible = false
+                        hpSortCheckbox.isVisible = false
+                        sortDivider.isVisible = false
                     }
                 }
 
@@ -49,6 +53,10 @@ class OverviewFragment : Fragment() {
                         pokemonRv.isVisible = false
                         loadingIndicator.isVisible = false
                         loadingNextPageIndicator.isVisible = false
+                        attackSortCheckbox.isVisible = false
+                        defenseSortCheckbox.isVisible = false
+                        hpSortCheckbox.isVisible = false
+                        sortDivider.isVisible = false
                     }
                 }
 
@@ -59,6 +67,10 @@ class OverviewFragment : Fragment() {
                         pokemonRv.isVisible = true
                         loadingIndicator.isVisible = false
                         loadingNextPageIndicator.isVisible = false
+                        attackSortCheckbox.isVisible = true
+                        defenseSortCheckbox.isVisible = true
+                        hpSortCheckbox.isVisible = true
+                        sortDivider.isVisible = true
                     }
                 }
 
@@ -69,6 +81,10 @@ class OverviewFragment : Fragment() {
                         pokemonRv.isVisible = true
                         loadingIndicator.isVisible = false
                         loadingNextPageIndicator.isVisible = true
+                        attackSortCheckbox.isVisible = true
+                        defenseSortCheckbox.isVisible = true
+                        hpSortCheckbox.isVisible = true
+                        sortDivider.isVisible = true
                     }
                 }
 
@@ -94,11 +110,29 @@ class OverviewFragment : Fragment() {
             EndReachListener(layoutManager, viewModel::startLoadingNextPage)
         )
 
-        binding.fab.setOnClickListener { viewModel.refreshFromRandomPlace() }
+        viewModel.isAttackSortChecked.observe(viewLifecycleOwner) {
+            binding.attackSortCheckbox.isChecked = viewModel.isAttackSortChecked.value!!
+        }
 
-        binding.attackSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onAttackSortChecked))
-        binding.defenseSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onDefenseSortChecked))
-        binding.hpSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onHpSortChecked))
+        viewModel.isDefenseSortChecked.observe(viewLifecycleOwner) {
+            binding.defenseSortCheckbox.isChecked = viewModel.isDefenseSortChecked.value!!
+        }
+
+        viewModel.isHpSortChecked.observe(viewLifecycleOwner) {
+            binding.hpSortCheckbox.isChecked = viewModel.isHpSortChecked.value!!
+        }
+
+        with(binding) {
+            fab.setOnClickListener { viewModel.refreshFromRandomPlace() }
+
+            attackSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onAttackSortChecked))
+            defenseSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onDefenseSortChecked))
+            hpSortCheckbox.setOnCheckedChangeListener(OnCheckedListener(viewModel::onHpSortChecked))
+        }
+
+        viewModel.onScrollToTopRequested = {
+            layoutManager.smoothScrollToPosition(binding.pokemonRv, null, 0)
+        }
 
         return binding.root
     }
@@ -106,6 +140,11 @@ class OverviewFragment : Fragment() {
     private fun onPokemonClicked(pokemon: Pokemon) {
         val bundle = Bundle().apply { putString("pokemonName", pokemon.name) }
         findNavController().navigate(R.id.action_OverviewFragment_to_detailsFragment, bundle)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onScrollToTopRequested = {}
     }
 }
 

@@ -1,6 +1,5 @@
 package laiss.pokemon.pokemonandroidoldtech.ui.viewModels
 
-import android.os.AsyncTask
 import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +13,7 @@ import kotlin.concurrent.thread
 
 private const val MIN_ON_PAGE = 30
 
-class OverviewViewModel() : ViewModel(), KoinComponent {
+class OverviewViewModel : ViewModel(), KoinComponent {
     private val pokemonRepository: IPokemonRepository by inject()
     private val uiHandler: Handler by inject()
 
@@ -41,6 +40,8 @@ class OverviewViewModel() : ViewModel(), KoinComponent {
     private val _isHpSortChecked = MutableLiveData(false)
     val isHpSortChecked: LiveData<Boolean> = _isHpSortChecked
 
+    var onScrollToTopRequested: () -> Unit = {}
+
     init {
         pokemonRepository.getPage(0, 0, ::onPageLoaded)
     }
@@ -66,16 +67,28 @@ class OverviewViewModel() : ViewModel(), KoinComponent {
         pokemonRepository.getRandomPageNumberAndOffset(::onRandomNumberAndOffsetReceived)
     }
 
-    fun onAttackSortChecked(isChecked: Boolean){
-        _isAttackSortChecked.value = isChecked  // TODO: Implement sort
+    fun onAttackSortChecked(isChecked: Boolean) {
+        _isAttackSortChecked.value = isChecked
+        if (isChecked.not()) return
+
+        _pokemonList.value = pokemonList.value!!.sortedByDescending { it.attack }
+        onScrollToTopRequested()
     }
 
-    fun onDefenseSortChecked(isChecked: Boolean){
+    fun onDefenseSortChecked(isChecked: Boolean) {
         _isDefenseSortChecked.value = isChecked
+        if (isChecked.not()) return
+
+        _pokemonList.value = pokemonList.value!!.sortedByDescending { it.defense }
+        onScrollToTopRequested()
     }
 
-    fun onHpSortChecked(isChecked: Boolean){
+    fun onHpSortChecked(isChecked: Boolean) {
         _isHpSortChecked.value = isChecked
+        if (isChecked.not()) return
+
+        _pokemonList.value = pokemonList.value!!.sortedByDescending { it.hp }
+        onScrollToTopRequested()
     }
 
     private fun onPageLoaded(newPageResult: Result<List<Pokemon>>) {
@@ -84,6 +97,7 @@ class OverviewViewModel() : ViewModel(), KoinComponent {
             if (newPage.isEmpty())
                 isEndReached = true
             _pokemonList.value = pokemonList.value!! + newPage
+            dropSorts()
             _state.value = State.Presenting
             ++page
         } catch (exception: Exception) {
@@ -109,6 +123,7 @@ class OverviewViewModel() : ViewModel(), KoinComponent {
             _pokemonList.value = entries
             _state.value = State.Presenting
             if (entries.size < MIN_ON_PAGE) pokemonRepository.getPage(0, 0, ::onPageLoaded)
+            dropSorts()
         } catch (exception: Exception) {
             _lastError.value = exception.message
             _state.value = State.Error
@@ -123,5 +138,11 @@ class OverviewViewModel() : ViewModel(), KoinComponent {
                 Thread.sleep(100)
             uiHandler.post { callback() }
         }
+    }
+
+    private fun dropSorts() {
+        _isAttackSortChecked.value = false
+        _isDefenseSortChecked.value = false
+        _isHpSortChecked.value = false
     }
 }
