@@ -7,7 +7,9 @@ import laiss.pokemon.pokemonandroidoldtech.data.dataSources.PokemonEntity
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.data.models.toEntity
 import laiss.pokemon.pokemonandroidoldtech.data.models.toModel
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadPoolExecutor
+import kotlin.concurrent.thread
 import kotlin.random.Random
 
 interface IPokemonRepository {
@@ -129,7 +131,22 @@ private class OnlineStrategy(
         val headerList =
             repository.pokeApiDataSource.getPokemonHeadersList(offset, repository.pageSize)
 
-        val pokemonList = headerList.results.map { getPokemonByName(it.name) }
+        val loadedPokemonByName = ConcurrentHashMap<String, Pokemon>()
+
+        val pokemonListThreads = headerList.results.map {
+            thread {
+                val pokemon = getPokemonByName(it.name)
+                loadedPokemonByName[pokemon.name] = pokemon
+            }
+        }
+
+        pokemonListThreads.forEach { it.join() }
+
+        val pokemonList = headerList.results.map {
+            loadedPokemonByName[it.name]
+                ?: error("Pokemon ${it.name} not loaded, however load didn't fail")
+        }
+
         synchronized(pokemonListCache) {
             pokemonList.forEachIndexed { i, pokemon -> pokemonListCache[offset + i] = pokemon }
         }

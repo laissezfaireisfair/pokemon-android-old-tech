@@ -121,9 +121,9 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         try {
             val entries = result.getOrThrow()
             _pokemonList.value = entries
-            _state.value = State.Presenting
             if (entries.size < MIN_ON_PAGE) pokemonRepository.getPage(0, 0, ::onPageLoaded)
             dropSorts()
+            _state.value = State.Presenting
         } catch (exception: Exception) {
             _lastError.value = exception.message
             _state.value = State.Error
