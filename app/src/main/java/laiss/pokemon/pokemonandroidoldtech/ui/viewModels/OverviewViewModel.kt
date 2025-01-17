@@ -84,8 +84,9 @@ class OverviewViewModel : ViewModel(), KoinComponent {
                 isRefreshRequested = true
 
                 while (state.value == State.Loading) delay(100)
-                _state.value = State.Loading
                 _pokemonList.value = emptyList()
+                delay(100)
+                _state.value = State.Loading
 
                 val (newPage, newPagingOffset) = pokemonRepository.getRandomPageNumberAndOffset()
 
