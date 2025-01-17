@@ -1,16 +1,15 @@
 package laiss.pokemon.pokemonandroidoldtech.ui.viewModels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import laiss.pokemon.pokemonandroidoldtech.data.IPokemonRepository
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-
 
 private const val MIN_ON_PAGE = 30
 
@@ -22,23 +21,23 @@ class OverviewViewModel : ViewModel(), KoinComponent {
     private var pagingOffset = 0
     private var isRefreshRequested = false
 
-    private val _pokemonList = MutableLiveData(emptyList<Pokemon>())
-    val pokemonList: LiveData<List<Pokemon>> = _pokemonList
+    private val _pokemonList = MutableStateFlow(emptyList<Pokemon>())
+    val pokemonList: StateFlow<List<Pokemon>> = _pokemonList
 
-    private val _state = MutableLiveData(State.Loading)
-    val state: LiveData<State> = _state
+    private val _state = MutableStateFlow(State.Loading)
+    val state: StateFlow<State> = _state
 
-    private val _lastError = MutableLiveData<String?>(null)
-    val lastError: LiveData<String?> = _lastError
+    private val _lastError = MutableStateFlow<String?>(null)
+    val lastError: StateFlow<String?> = _lastError
 
-    private val _isAttackSortChecked = MutableLiveData(false)
-    val isAttackSortChecked: LiveData<Boolean> = _isAttackSortChecked
+    private val _isAttackSortChecked = MutableStateFlow(false)
+    val isAttackSorting: StateFlow<Boolean> = _isAttackSortChecked
 
-    private val _isDefenseSortChecked = MutableLiveData(false)
-    val isDefenseSortChecked: LiveData<Boolean> = _isDefenseSortChecked
+    private val _isDefenseSortChecked = MutableStateFlow(false)
+    val isDefenseSortChecked: StateFlow<Boolean> = _isDefenseSortChecked
 
-    private val _isHpSortChecked = MutableLiveData(false)
-    val isHpSortChecked: LiveData<Boolean> = _isHpSortChecked
+    private val _isHpSortChecked = MutableStateFlow(false)
+    val isHpSortChecked: StateFlow<Boolean> = _isHpSortChecked
 
     var onScrollToTopRequested: () -> Unit = {}
 
@@ -66,7 +65,7 @@ class OverviewViewModel : ViewModel(), KoinComponent {
                 val newPage = pokemonRepository.getPage(page + 1, pagingOffset)
                 if (newPage.isEmpty())
                     isEndReached = true
-                _pokemonList.value = pokemonList.value!! + newPage
+                _pokemonList.value = pokemonList.value + newPage
                 dropSorts()
                 _state.value = State.Presenting
                 ++page
@@ -111,7 +110,7 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         _isAttackSortChecked.value = isChecked
         if (isChecked.not()) return
 
-        _pokemonList.value = pokemonList.value!!.sortedByDescending { it.attack }
+        _pokemonList.value = pokemonList.value.sortedByDescending { it.attack }
         onScrollToTopRequested()
     }
 
@@ -119,7 +118,7 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         _isDefenseSortChecked.value = isChecked
         if (isChecked.not()) return
 
-        _pokemonList.value = pokemonList.value!!.sortedByDescending { it.defense }
+        _pokemonList.value = pokemonList.value.sortedByDescending { it.defense }
         onScrollToTopRequested()
     }
 
@@ -127,7 +126,7 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         _isHpSortChecked.value = isChecked
         if (isChecked.not()) return
 
-        _pokemonList.value = pokemonList.value!!.sortedByDescending { it.hp }
+        _pokemonList.value = pokemonList.value.sortedByDescending { it.hp }
         onScrollToTopRequested()
     }
 

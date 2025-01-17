@@ -11,6 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import laiss.pokemon.pokemonandroidoldtech.R
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
 import laiss.pokemon.pokemonandroidoldtech.databinding.OverviewFragmentBinding
@@ -21,6 +24,8 @@ class OverviewFragment : Fragment() {
     private lateinit var binding: OverviewFragmentBinding
     private val viewModel: OverviewViewModel by viewModels()
 
+    private val scope = CoroutineScope(Dispatchers.Main)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,71 +33,69 @@ class OverviewFragment : Fragment() {
     ): View {
         binding = OverviewFragmentBinding.inflate(inflater, container, false)
 
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (viewModel.state.value) {
-                OverviewViewModel.State.Loading -> {
-                    with(binding) {
-                        errorHeader.isVisible = false
-                        errorMessage.isVisible = false
-                        pokemonRv.isVisible = false
-                        loadingIndicator.isVisible = true
-                        loadingNextPageIndicator.isVisible = false
-                        attackSortCheckbox.isVisible = false
-                        defenseSortCheckbox.isVisible = false
-                        hpSortCheckbox.isVisible = false
-                        sortDivider.isVisible = false
+        scope.launch {
+            viewModel.state.collect {
+                when (it) {
+                    OverviewViewModel.State.Loading -> {
+                        with(binding) {
+                            errorHeader.isVisible = false
+                            errorMessage.isVisible = false
+                            pokemonRv.isVisible = false
+                            loadingIndicator.isVisible = true
+                            loadingNextPageIndicator.isVisible = false
+                            attackSortCheckbox.isVisible = false
+                            defenseSortCheckbox.isVisible = false
+                            hpSortCheckbox.isVisible = false
+                            sortDivider.isVisible = false
+                        }
+                    }
+
+                    OverviewViewModel.State.Error -> {
+                        with(binding) {
+                            errorHeader.isVisible = true
+                            errorMessage.isVisible = true
+                            pokemonRv.isVisible = false
+                            loadingIndicator.isVisible = false
+                            loadingNextPageIndicator.isVisible = false
+                            attackSortCheckbox.isVisible = false
+                            defenseSortCheckbox.isVisible = false
+                            hpSortCheckbox.isVisible = false
+                            sortDivider.isVisible = false
+                        }
+                    }
+
+                    OverviewViewModel.State.Presenting -> {
+                        with(binding) {
+                            errorHeader.isVisible = false
+                            errorMessage.isVisible = false
+                            pokemonRv.isVisible = true
+                            loadingIndicator.isVisible = false
+                            loadingNextPageIndicator.isVisible = false
+                            attackSortCheckbox.isVisible = true
+                            defenseSortCheckbox.isVisible = true
+                            hpSortCheckbox.isVisible = true
+                            sortDivider.isVisible = true
+                        }
+                    }
+
+                    OverviewViewModel.State.LoadingAdditionalPage -> {
+                        with(binding) {
+                            errorHeader.isVisible = false
+                            errorMessage.isVisible = false
+                            pokemonRv.isVisible = true
+                            loadingIndicator.isVisible = false
+                            loadingNextPageIndicator.isVisible = true
+                            attackSortCheckbox.isVisible = true
+                            defenseSortCheckbox.isVisible = true
+                            hpSortCheckbox.isVisible = true
+                            sortDivider.isVisible = true
+                        }
                     }
                 }
-
-                OverviewViewModel.State.Error -> {
-                    with(binding) {
-                        errorHeader.isVisible = true
-                        errorMessage.isVisible = true
-                        pokemonRv.isVisible = false
-                        loadingIndicator.isVisible = false
-                        loadingNextPageIndicator.isVisible = false
-                        attackSortCheckbox.isVisible = false
-                        defenseSortCheckbox.isVisible = false
-                        hpSortCheckbox.isVisible = false
-                        sortDivider.isVisible = false
-                    }
-                }
-
-                OverviewViewModel.State.Presenting -> {
-                    with(binding) {
-                        errorHeader.isVisible = false
-                        errorMessage.isVisible = false
-                        pokemonRv.isVisible = true
-                        loadingIndicator.isVisible = false
-                        loadingNextPageIndicator.isVisible = false
-                        attackSortCheckbox.isVisible = true
-                        defenseSortCheckbox.isVisible = true
-                        hpSortCheckbox.isVisible = true
-                        sortDivider.isVisible = true
-                    }
-                }
-
-                OverviewViewModel.State.LoadingAdditionalPage -> {
-                    with(binding) {
-                        errorHeader.isVisible = false
-                        errorMessage.isVisible = false
-                        pokemonRv.isVisible = true
-                        loadingIndicator.isVisible = false
-                        loadingNextPageIndicator.isVisible = true
-                        attackSortCheckbox.isVisible = true
-                        defenseSortCheckbox.isVisible = true
-                        hpSortCheckbox.isVisible = true
-                        sortDivider.isVisible = true
-                    }
-                }
-
-                null -> error("LiveData of non-nullable type shouldn't provide null")
             }
         }
 
-        viewModel.lastError.observe(viewLifecycleOwner) {
-            binding.errorMessage.text = viewModel.lastError.value
-        }
+        scope.launch { viewModel.lastError.collect { binding.errorMessage.text = it } }
 
         val layoutManager = LinearLayoutManager(requireContext())
         binding.pokemonRv.layoutManager = layoutManager
@@ -100,24 +103,22 @@ class OverviewFragment : Fragment() {
         val pokemonAdapter = PokemonAdapter(requireContext(), ::onPokemonClicked)
         binding.pokemonRv.adapter = pokemonAdapter
 
-        viewModel.pokemonList.observe(viewLifecycleOwner) {
-            pokemonAdapter.submitList(it)
-        }
+        scope.launch { viewModel.pokemonList.collect { pokemonAdapter.submitList(it) } }
 
         binding.pokemonRv.addOnScrollListener(
             EndReachListener(layoutManager, viewModel::loadNextPage)
         )
 
-        viewModel.isAttackSortChecked.observe(viewLifecycleOwner) {
-            binding.attackSortCheckbox.isChecked = viewModel.isAttackSortChecked.value!!
+        scope.launch {
+            viewModel.isAttackSorting.collect { binding.attackSortCheckbox.isChecked = it }
         }
 
-        viewModel.isDefenseSortChecked.observe(viewLifecycleOwner) {
-            binding.defenseSortCheckbox.isChecked = viewModel.isDefenseSortChecked.value!!
+        scope.launch {
+            viewModel.isDefenseSortChecked.collect { binding.defenseSortCheckbox.isChecked = it }
         }
 
-        viewModel.isHpSortChecked.observe(viewLifecycleOwner) {
-            binding.hpSortCheckbox.isChecked = viewModel.isHpSortChecked.value!!
+        scope.launch {
+            viewModel.isHpSortChecked.collect { binding.hpSortCheckbox.isChecked = it }
         }
 
         with(binding) {

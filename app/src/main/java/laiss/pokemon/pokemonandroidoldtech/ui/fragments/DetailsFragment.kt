@@ -9,6 +9,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import laiss.pokemon.pokemonandroidoldtech.databinding.FragmentDetailsBinding
 import laiss.pokemon.pokemonandroidoldtech.ui.viewModels.DetailsViewModel
 import laiss.pokemon.pokemonandroidoldtech.utils.capitalize
@@ -29,57 +32,63 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    private val scope = CoroutineScope(Dispatchers.Main)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentDetailsBinding.inflate(inflater, container, false)
 
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (viewModel.state.value) {
-                DetailsViewModel.State.Loading -> {
-                    binding.card.isVisible = false
-                    binding.errorLayout.isVisible = false
-                    binding.loadingIndicator.isVisible = true
-                }
+        scope.launch {
+            viewModel.state.collect {
+                when (it) {
+                    DetailsViewModel.State.Loading -> {
+                        with(binding) {
+                            card.isVisible = false
+                            errorLayout.isVisible = false
+                            loadingIndicator.isVisible = true
+                        }
+                    }
 
-                DetailsViewModel.State.Error -> {
-                    binding.card.isVisible = false
-                    binding.errorLayout.isVisible = true
-                    binding.loadingIndicator.isVisible = false
-                }
+                    DetailsViewModel.State.Error -> {
+                        with(binding) {
+                            card.isVisible = false
+                            errorLayout.isVisible = true
+                            loadingIndicator.isVisible = false
+                        }
+                    }
 
-                DetailsViewModel.State.Presenting -> {
-                    binding.card.isVisible = true
-                    binding.errorLayout.isVisible = false
-                    binding.loadingIndicator.isVisible = false
+                    DetailsViewModel.State.Presenting -> {
+                        with(binding) {
+                            card.isVisible = true
+                            errorLayout.isVisible = false
+                            loadingIndicator.isVisible = false
+                        }
+                    }
                 }
-
-                null -> error("LiveData of non-nullable type shouldn't provide null")
             }
         }
 
-        viewModel.lastError.observe(viewLifecycleOwner) {
-            binding.errorMessage.text = viewModel.lastError.value
-        }
+        scope.launch { viewModel.lastError.collect { binding.errorMessage.text = it } }
 
-        viewModel.pokemon.observe(viewLifecycleOwner) {
-            with(viewModel.pokemon.value) {
-                if (this == null) return@observe
+        scope.launch {
+            viewModel.pokemon.collect {
+                with(binding) {
+                    if (it == null) return@with
 
-                Glide.with(requireContext()).load(imageUrl).into(binding.frontImage)
-                binding.name.text = name.capitalize()
-                binding.height.text = "${heightDm * 10}"
-                binding.weight.text = "${weightHg / 10.0}"
-                binding.attack.text = "$attack"
-                binding.defence.text = "$defense"
-                binding.hp.text = "$hp"
+                    Glide.with(requireContext()).load(it.imageUrl).into(frontImage)
+                    name.text = it.name.capitalize()
+                    height.text = "${it.heightDm * 10}"
+                    weight.text = "${it.weightHg / 10.0}"
+                    attack.text = "${it.attack}"
+                    defence.text = "${it.defense}"
+                    hp.text = "${it.hp}"
 
-                binding.typesList.removeAllViews()
-                types.forEach {
-                    binding.typesList.addView(TextView(requireContext()).apply {
-                        text = it.typeString
-                    })
+                    typesList.removeAllViews()
+                    it.types.forEach {
+                        typesList.addView(TextView(requireContext()).apply { text = it.typeString })
+                    }
                 }
             }
         }
