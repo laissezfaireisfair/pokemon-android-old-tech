@@ -2,6 +2,44 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PokemonAndroidOldTech" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:colorBackground">@color/base</item>
+        <item name="colorOnBackground">@color/text</item>
+
+        <item name="colorSurface">@color/surface1</item>
+        <item name="colorSurfaceBright">@color/surface2</item>
+        <item name="colorSurfaceContainer">@color/surface1</item>
+        <item name="colorSurfaceContainerHigh">@color/surface2</item>
+        <item name="colorSurfaceContainerLow">@color/surface0</item>
+        <item name="colorSurfaceContainerLowest">@color/surface0</item>
+        <item name="colorSurfaceDim">@color/surface0</item>
+        <item name="colorSurfaceVariant">@color/surface0</item>
+        <item name="colorSurfaceInverse">@color/crust</item>
+        <item name="colorOnSurface">@color/text</item>
+        <item name="colorOnSurfaceVariant">@color/subtext0</item>
+        <item name="colorOnSurfaceInverse">@color/text</item>
+
+        <item name="colorPrimary">@color/peach</item>
+        <item name="colorPrimaryContainer">@color/rosewater</item>
+        <item name="colorPrimaryInverse">@color/rosewater</item>
+        <item name="colorOnPrimary">@color/mantle</item>
+        <item name="colorOnPrimaryContainer">@color/mantle</item>
+
+        <item name="colorSecondary">@color/surface2</item>
+        <item name="colorSecondaryContainer">@color/overlay2</item>
+        <item name="colorOnSecondary">@color/text</item>
+        <item name="colorOnSecondaryContainer">@color/crust</item>
+
+        <item name="colorTertiary">@color/surface2</item>
+        <item name="colorTertiaryContainer">@color/overlay2</item>
+        <item name="colorOnTertiary">@color/text</item>
+        <item name="colorOnTertiaryContainer">@color/crust</item>
+
+        <item name="colorOutline">@color/lavender</item>
+        <item name="colorOutlineVariant">@color/overlay0</item>
+
+        <item name="colorError">@color/red</item>
+        <item name="colorErrorContainer">@color/pink</item>
+        <item name="colorOnError">@color/text</item>
+        <item name="colorOnErrorContainer">@color/mantle</item>
     </style>
 </resources>

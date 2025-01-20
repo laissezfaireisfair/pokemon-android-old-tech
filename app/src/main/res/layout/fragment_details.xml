@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.DetailsFragment">
+
+    <LinearLayout
+        android:id="@+id/error_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/errorHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/something_went_wrong"
+            android:textColor="?colorError" />
+
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/subtext0"
+            tools:text="404 Not Found" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp">
+
+            <ImageView
+                android:id="@+id/front_image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="4dp"
+                android:contentDescription="@string/details_front_image_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/front_image" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="?colorPrimary"
+                android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/front_image"
+                tools:text="Bulbasaur" />
+
+            <ImageView
+                android:id="@+id/height_icon"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/height_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                app:srcCompat="@drawable/height"
+                app:tint="@color/text" />
+
+            <TextView
+                android:id="@+id/height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/height_icon"
+                app:layout_constraintTop_toTopOf="@id/height_icon"
+                tools:text="7.0" />
+
+            <TextView
+                android:id="@+id/height_units"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/height_units"
+                android:textColor="@color/subtext0"
+                app:layout_constraintStart_toEndOf="@id/height"
+                app:layout_constraintTop_toTopOf="@id/height" />
+
+            <ImageView
+                android:id="@+id/weight_icon"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/weight_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/height_icon"
+                app:srcCompat="@drawable/weight"
+                app:tint="@color/text" />
+
+            <TextView
+                android:id="@+id/weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/weight_icon"
+                app:layout_constraintTop_toTopOf="@id/weight_icon"
+                tools:text="69.0" />
+
+            <TextView
+                android:id="@+id/weight_units"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/weight_units"
+                android:textColor="@color/subtext0"
+                app:layout_constraintStart_toEndOf="@id/weight"
+                app:layout_constraintTop_toTopOf="@id/weight" />
+
+            <ImageView
+                android:id="@+id/attack_icon"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/attack_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weight_icon"
+                app:srcCompat="@drawable/attack"
+                app:tint="@color/text" />
+
+            <TextView
+                android:id="@+id/attack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/attack_icon"
+                app:layout_constraintTop_toTopOf="@id/attack_icon"
+                tools:text="49" />
+
+            <ImageView
+                android:id="@+id/defence_icon"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/defence_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/attack_icon"
+                app:srcCompat="@drawable/defense"
+                app:tint="@color/text" />
+
+            <TextView
+                android:id="@+id/defence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/defence_icon"
+                app:layout_constraintTop_toTopOf="@id/defence_icon"
+                tools:text="49" />
+
+            <ImageView
+                android:id="@+id/hp_icon"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/hp_icon_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/defence_icon"
+                app:srcCompat="@drawable/hp"
+                app:tint="@color/text" />
+
+            <TextView
+                android:id="@+id/hp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/hp_icon"
+                app:layout_constraintTop_toTopOf="@id/hp_icon"
+                tools:text="45" />
+
+            <LinearLayout
+                android:id="@+id/types_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/vertical_divider"
+                android:orientation="horizontal"
+                android:showDividers="middle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/hp_icon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

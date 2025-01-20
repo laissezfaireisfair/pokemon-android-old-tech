@@ -2,4 +2,33 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="base">#ff24273a</color>
+    <color name="crust">#ff181926</color>
+    <color name="mantle">#ff1e2030</color>
+
+    <color name="surface0">#ff363a4f</color>
+    <color name="surface1">#ff494d64</color>
+    <color name="surface2">#ff5b6078</color>
+
+    <color name="overlay0">#ff6e738d</color>
+    <color name="overlay1">#ff8087a2</color>
+    <color name="overlay2">#ff939ab7</color>
+
+    <color name="text">#ffcad3f5</color>
+    <color name="subtext0">#ffa5adcb</color>
+    <color name="subtext1">#ffb8c0e0</color>
+
+    <color name="red">#ffed8796</color>
+    <color name="green">#ffa6da95</color>
+    <color name="yellow">#ffeed49f</color>
+    <color name="blue">#ff8aadf4</color>
+    <color name="lavender">#ffb7bdf8</color>
+    <color name="rosewater">#fff4dbd6</color>
+    <color name="peach">#fff5a97f</color>
+    <color name="flamingo">#fff0c6c6</color>
+    <color name="pink">#fff5bde6</color>
+    <color name="teal">#ff8bd5ca</color>
+
+    <color name="mantleHalfCapacity">#FFFFFFFF</color>
 </resources>
