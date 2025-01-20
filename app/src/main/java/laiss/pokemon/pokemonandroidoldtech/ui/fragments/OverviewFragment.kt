@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -40,14 +39,14 @@ class OverviewFragment : Fragment() {
                     OverviewViewModel.State.Loading -> {
                         with(binding) {
                             errorHeader.visibility = View.GONE
+                            pokemonRv.visibility = View.VISIBLE
                             errorMessage.visibility = View.GONE
-                            pokemonRv.visibility = View.INVISIBLE
-                            loadingIndicator.visibility = View.VISIBLE
-                            loadingNextPageIndicator.visibility = View.GONE
-                            attackSortCheckbox.visibility = View.INVISIBLE
-                            defenseSortCheckbox.visibility = View.INVISIBLE
-                            hpSortCheckbox.visibility = View.INVISIBLE
-                            sortDivider.visibility = View.INVISIBLE
+                            loadingIndicator.visibility = View.GONE
+                            loadingNextPageIndicator.visibility = View.VISIBLE
+                            attackSortCheckbox.visibility = View.VISIBLE
+                            defenseSortCheckbox.visibility = View.VISIBLE
+                            hpSortCheckbox.visibility = View.VISIBLE
+                            sortDivider.visibility = View.VISIBLE
                         }
                     }
 
@@ -79,19 +78,6 @@ class OverviewFragment : Fragment() {
                         }
                     }
 
-                    OverviewViewModel.State.LoadingAdditionalPage -> {
-                        with(binding) {
-                            errorHeader.visibility = View.GONE
-                            pokemonRv.visibility = View.VISIBLE
-                            errorMessage.visibility = View.GONE
-                            loadingIndicator.visibility = View.GONE
-                            loadingNextPageIndicator.visibility = View.VISIBLE
-                            attackSortCheckbox.visibility = View.VISIBLE
-                            defenseSortCheckbox.visibility = View.VISIBLE
-                            hpSortCheckbox.visibility = View.VISIBLE
-                            sortDivider.visibility = View.VISIBLE
-                        }
-                    }
                 }
             }
         }

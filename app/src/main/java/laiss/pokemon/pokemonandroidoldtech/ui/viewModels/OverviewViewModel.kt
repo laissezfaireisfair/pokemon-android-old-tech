@@ -2,10 +2,10 @@ package laiss.pokemon.pokemonandroidoldtech.ui.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onEmpty
 import kotlinx.coroutines.launch
 import laiss.pokemon.pokemonandroidoldtech.data.IPokemonRepository
 import laiss.pokemon.pokemonandroidoldtech.data.models.Pokemon
@@ -45,9 +45,12 @@ class OverviewViewModel : ViewModel(), KoinComponent {
     init {
         viewModelScope.launch {
             try {
-                val entries = pokemonRepository.getPage(0)
-                _pokemonList.value = entries
+                pokemonRepository.getPage(0)
+                    .onEmpty { isEndReached = true }
+                    .collect { _pokemonList.value += it }
+
                 _state.value = State.Presenting
+                ++page
             } catch (exception: Exception) {
                 _lastError.value = exception.message
                 _state.value = State.Error
@@ -55,19 +58,18 @@ class OverviewViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    enum class State { Loading, Error, Presenting, LoadingAdditionalPage }
+    enum class State { Error, Presenting, Loading }
 
     fun loadNextPage() {
         viewModelScope.launch {
             try {
                 if (isEndReached || state.value != State.Presenting) return@launch
-                _state.value = State.LoadingAdditionalPage
+                _state.value = State.Loading
 
-                val newPage = pokemonRepository.getPage(page + 1, pagingOffset)
-                if (newPage.isEmpty())
-                    isEndReached = true
-                _pokemonList.value = pokemonList.value + newPage
-                dropSorts()
+                pokemonRepository.getPage(page + 1, pagingOffset)
+                    .onEmpty { isEndReached = true }
+                    .collect { _pokemonList.value += it }
+
                 _state.value = State.Presenting
                 ++page
             } catch (exception: Exception) {
@@ -86,14 +88,18 @@ class OverviewViewModel : ViewModel(), KoinComponent {
                 while (state.value == State.Loading) delay(100)
                 _pokemonList.value = emptyList()
                 _state.value = State.Loading
+                dropSorts()
 
                 val (newPage, newPagingOffset) = pokemonRepository.getRandomPageNumberAndOffset()
 
-                val entries = pokemonRepository.getPage(newPage, newPagingOffset).toMutableList()
-                if (entries.size < MIN_ON_PAGE) entries += pokemonRepository.getPage(0)
-                _pokemonList.value = entries.toList()
+                pokemonRepository.getPage(newPage, newPagingOffset)
+                    .onEmpty { isEndReached = true }
+                    .collect { _pokemonList.value += it }
 
-                dropSorts()
+                if (pokemonList.value.size < MIN_ON_PAGE) pokemonRepository.getPage(0, 0)
+                    .onEmpty { isEndReached = true }
+                    .collect { _pokemonList.value += it }
+
                 _state.value = State.Presenting
 
                 page = newPage
@@ -135,11 +141,6 @@ class OverviewViewModel : ViewModel(), KoinComponent {
             _pokemonList.value = pokemonList.value.sortedByDescending { it.hp }
             requestScrollToTop()
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.cancel()
     }
 
     private fun dropSorts() {
